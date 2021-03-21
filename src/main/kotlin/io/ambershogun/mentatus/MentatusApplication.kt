@@ -5,8 +5,8 @@ import ch.qos.logback.classic.LoggerContext
 import io.ambershogun.mentatus.core.AdminTelegramLogAppender
 import org.slf4j.LoggerFactory
 import org.springframework.boot.autoconfigure.SpringBootApplication
+import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.boot.runApplication
-import org.springframework.cloud.openfeign.EnableFeignClients
 import org.springframework.context.ConfigurableApplicationContext
 import org.springframework.scheduling.annotation.EnableAsync
 import org.springframework.scheduling.annotation.EnableScheduling
@@ -15,7 +15,7 @@ import org.springframework.scheduling.annotation.EnableScheduling
 @SpringBootApplication
 @EnableScheduling
 @EnableAsync
-@EnableFeignClients
+@EnableConfigurationProperties
 class MentatusApplication
 
 fun main(args: Array<String>) {

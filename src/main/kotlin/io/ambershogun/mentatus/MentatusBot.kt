@@ -1,8 +1,8 @@
 package io.ambershogun.mentatus
 
+import io.ambershogun.mentatus.core.properties.AppProperties
 import io.ambershogun.mentatus.message.MessageHandlerRegistry
 import org.slf4j.LoggerFactory
-import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
 import org.telegram.telegrambots.bots.TelegramLongPollingBot
 import org.telegram.telegrambots.meta.TelegramBotsApi
@@ -12,8 +12,7 @@ import org.telegram.telegrambots.updatesreceivers.DefaultBotSession
 
 @Component
 final class MentatusBot(
-        @Value("\${mentatus.bot.name}") private val botName: String,
-        @Value("\${mentatus.bot.token}") private val botToken: String,
+        private val appProperties: AppProperties,
         private val registry: MessageHandlerRegistry
 ) : TelegramLongPollingBot() {
 
@@ -49,10 +48,10 @@ final class MentatusBot(
     }
 
     override fun getBotUsername(): String {
-        return botName
+        return appProperties.bot.name!!
     }
 
     override fun getBotToken(): String {
-        return botToken
+        return appProperties.bot.token!!
     }
 }

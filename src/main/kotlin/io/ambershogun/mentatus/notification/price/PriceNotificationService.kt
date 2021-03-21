@@ -1,6 +1,5 @@
 package io.ambershogun.mentatus.notification.price
 
-import io.ambershogun.mentatus.message.handler.AddPriceNotificationMessageHandler
 import io.ambershogun.mentatus.notification.price.exception.StockNotFoundException
 import org.springframework.stereotype.Service
 import java.math.BigDecimal
@@ -23,7 +22,7 @@ class PriceNotificationService(
         return notificationRepository.findAll().map { n -> n.ticker }.distinct().toList()
     }
 
-    fun findNotifications(ticker: String, currentPrice: BigDecimal, equitySign: EquitySign): List<PriceNotification> {
+    fun findNotifications(ticker: String, equitySign: EquitySign, currentPrice: Double): List<PriceNotification> {
         return when (equitySign) {
             EquitySign.GREATER -> notificationRepository.findByTickerAndPriceLessThen(ticker, EquitySign.GREATER, currentPrice)
             EquitySign.LESS -> notificationRepository.findByTickerAndPriceGreaterThen(ticker, EquitySign.LESS, currentPrice)
@@ -35,7 +34,7 @@ class PriceNotificationService(
     }
 
     fun createNotification(chatId: Long, inputMessage: String): PriceNotification {
-        val parts = inputMessage.split(AddPriceNotificationMessageHandler.LESS_DELIMITER, AddPriceNotificationMessageHandler.GREATER_DELIMITER)
+        val parts = inputMessage.split(EquitySign.LESS.sign, EquitySign.GREATER.sign)
 
         val price = BigDecimal.valueOf(parts[1].trim().replace(",", ".").toDouble()).setScale(2, RoundingMode.FLOOR)
 
@@ -49,17 +48,17 @@ class PriceNotificationService(
                         chatId,
                         yahooFinanceTickerName,
                         getEquitySign(inputMessage),
-                        price
+                        price.toDouble()
                 )
         )
     }
 
     fun getEquitySign(inputMessage: String): EquitySign {
-        if (inputMessage.contains(AddPriceNotificationMessageHandler.LESS_DELIMITER)) {
+        if (inputMessage.contains(EquitySign.LESS.sign)) {
             return EquitySign.LESS
         }
 
-        if (inputMessage.contains(AddPriceNotificationMessageHandler.GREATER_DELIMITER)) {
+        if (inputMessage.contains(EquitySign.GREATER.sign)) {
             return EquitySign.GREATER
         }
 

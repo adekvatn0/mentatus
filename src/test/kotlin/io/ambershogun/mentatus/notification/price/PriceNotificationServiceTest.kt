@@ -6,8 +6,10 @@ import org.junit.Test
 import org.mockito.ArgumentMatchers.anyString
 import org.mockito.Mockito
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.util.CollectionUtils
 import java.math.BigDecimal
 import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
 class PriceNotificationServiceTest : AbstractTest() {
 
@@ -32,13 +34,13 @@ class PriceNotificationServiceTest : AbstractTest() {
 
     @Test
     fun `create notification`() {
-        priceNotificationService.createNotification(1, "sber > 300")
+        priceNotificationService.createNotification(1, "sber > 300.02")
 
         val notification = priceNotificationRepository.findAll().first()
         assertEquals(1, notification.chatId)
         assertEquals("SBER", notification.ticker)
         assertEquals(EquitySign.GREATER, notification.equitySign)
-        assertEquals(BigDecimal.valueOf(300).setScale(2), notification.price)
+        assertEquals(300.02, notification.price)
     }
 
     @Test
@@ -64,37 +66,56 @@ class PriceNotificationServiceTest : AbstractTest() {
 
     @Test
     fun `find notifications`() {
-        priceNotificationService.createNotification(1, "mrna <125.593")
-        priceNotificationService.createNotification(1, "mrna>115.44")
-        priceNotificationService.createNotification(1, "aapl   < 80,2")
-        priceNotificationService.createNotification(1, "AAPL >  50")
-
         run {
-            val notifications = priceNotificationService.findNotifications("MRNA", BigDecimal.valueOf(120.00), EquitySign.GREATER)
+            priceNotificationService.createNotification(1, "mrna>115.44")
+
+            assertTrue(CollectionUtils.isEmpty(priceNotificationService.findNotifications("MRNA", EquitySign.LESS, 120.00)))
+
+            val notifications = priceNotificationService.findNotifications("MRNA", EquitySign.GREATER, 120.00)
             assertEquals(1, notifications.size)
             assertEquals("MRNA", notifications.first().ticker)
-            assertEquals(BigDecimal.valueOf(115.44), notifications.first().price)
+            assertEquals(115.44, notifications.first().price)
+
+            priceNotificationRepository.deleteAll()
         }
 
         run {
-            val notifications = priceNotificationService.findNotifications("MRNA", BigDecimal.valueOf(120.00), EquitySign.LESS)
+            priceNotificationService.createNotification(1, "mrna <125.593")
+
+            assertTrue(CollectionUtils.isEmpty(priceNotificationService.findNotifications("MRNA", EquitySign.GREATER, 120.00)))
+
+            val notifications = priceNotificationService.findNotifications("MRNA", EquitySign.LESS, 120.00)
             assertEquals(1, notifications.size)
             assertEquals("MRNA", notifications.first().ticker)
-            assertEquals(BigDecimal.valueOf(125.59), notifications.first().price)
+            assertEquals(125.59, notifications.first().price)
+
+            priceNotificationRepository.deleteAll()
         }
 
         run {
-            val notifications = priceNotificationService.findNotifications("AAPL", BigDecimal.valueOf(64.00), EquitySign.GREATER)
+            priceNotificationService.createNotification(1, "AAPL >  50")
+
+            assertTrue(CollectionUtils.isEmpty(priceNotificationService.findNotifications("AAPL", EquitySign.LESS, 64.00)))
+
+            val notifications = priceNotificationService.findNotifications("AAPL", EquitySign.GREATER, 64.00)
             assertEquals(1, notifications.size)
             assertEquals("AAPL", notifications.first().ticker)
-            assertEquals(BigDecimal.valueOf(50.00).setScale(2), notifications.first().price)
+            assertEquals(50.00, notifications.first().price)
+
+            priceNotificationRepository.deleteAll()
         }
 
         run {
-            val notifications = priceNotificationService.findNotifications("AAPL", BigDecimal.valueOf(64.00), EquitySign.LESS)
+            priceNotificationService.createNotification(1, "nok   < 10")
+
+            assertTrue(CollectionUtils.isEmpty(priceNotificationService.findNotifications("NOK", EquitySign.GREATER, 6.0)))
+
+            val notifications = priceNotificationService.findNotifications("NOK", EquitySign.LESS, 6.0)
             assertEquals(1, notifications.size)
-            assertEquals("AAPL", notifications.first().ticker)
-            assertEquals(BigDecimal.valueOf(80.20).setScale(2), notifications.first().price)
+            assertEquals("NOK", notifications.first().ticker)
+            assertEquals(10.00, notifications.first().price)
+
+            priceNotificationRepository.deleteAll()
         }
     }
 }

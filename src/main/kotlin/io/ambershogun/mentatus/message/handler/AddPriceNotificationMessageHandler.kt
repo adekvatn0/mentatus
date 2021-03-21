@@ -21,9 +21,4 @@ class AddPriceNotificationMessageHandler(
             createMessage(user, "notification.add.stock.not.found")
         }
     }
-
-    companion object {
-        const val LESS_DELIMITER = "<"
-        const val GREATER_DELIMITER = ">"
-    }
 }

@@ -5,7 +5,6 @@ import io.ambershogun.mentatus.notification.price.PriceNotification
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.springframework.beans.factory.annotation.Autowired
-import java.math.BigDecimal
 import java.util.*
 import java.util.stream.Collectors
 import kotlin.test.assertEquals
@@ -30,12 +29,13 @@ class ListNotificationsMessageHandlerTest : AbstractMessageHandlerTest() {
         }
 
         run {
-            val notification = priceNotificationRepository.save(PriceNotification(1, "MRNA", EquitySign.GREATER, BigDecimal.valueOf(100.00)))
+            val notification = priceNotificationRepository.save(PriceNotification(1, "MRNA", EquitySign.GREATER, 100.00))
 
             val response = messageHandler.handleMessage(1, "ru", "list")
             val notificationsListString = listOf(notification).stream()
                     .map { it.toString() }
                     .collect(Collectors.joining("\n"))
+
             assertEquals(
                     messageSource.getMessage("notification.list", arrayOf(notificationsListString), Locale.forLanguageTag("ru")),
                     response.text

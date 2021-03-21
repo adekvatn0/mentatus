@@ -1,6 +1,7 @@
 package io.ambershogun.mentatus.notification.price
 
 import io.ambershogun.mentatus.MentatusBot
+import org.springframework.context.MessageSource
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Service
 import java.math.BigDecimal
@@ -9,9 +10,9 @@ import java.math.BigDecimal
 class ScheduledNotificationService(
         private var stockService: StockService,
         private var notificationService: PriceNotificationService,
-        private var bot: MentatusBot
+        private var bot: MentatusBot,
+        private var messageSource: MessageSource
 ) {
-    private val trackedStocks: HashSet<String> = HashSet()
 
     @Scheduled(fixedRateString = "\${notification.update-rate-millis}")
     fun updateStockDataAndTriggerNotifications() {
@@ -24,17 +25,13 @@ class ScheduledNotificationService(
         val stocks = stockService.getStocks(tickers.toTypedArray())
         stocks.values.forEach { stock ->
             val ticker = stock.symbol
-            if (trackedStocks.contains(ticker)) {
-                notifyUsersAndDeleteNotifications(ticker, stock.quote.price, stock.quote.dayHigh, EquitySign.GREATER, stock.currency)
-                notifyUsersAndDeleteNotifications(ticker, stock.quote.price, stock.quote.dayLow, EquitySign.LESS, stock.currency)
-            }
-
-            trackedStocks.add(ticker)
+            notifyUsersAndDeleteNotifications(ticker, stock.quote.price, EquitySign.GREATER, stock.currency)
+            notifyUsersAndDeleteNotifications(ticker, stock.quote.price, EquitySign.LESS, stock.currency)
         }
     }
 
-    private fun notifyUsersAndDeleteNotifications(ticker: String, currentPrice: BigDecimal, priceToCompareWith: BigDecimal, equitySign: EquitySign, currency: String) {
-        val notifications = notificationService.findNotifications(ticker, priceToCompareWith, equitySign)
+    private fun notifyUsersAndDeleteNotifications(ticker: String, currentPrice: BigDecimal, equitySign: EquitySign, currency: String) {
+        val notifications = notificationService.findNotifications(ticker, equitySign, currentPrice.toDouble())
 
         notifications.forEach { notification ->
             bot.sendMessageText(
