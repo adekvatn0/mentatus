@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service
 
 @Service
 class HealthScheduledService(
-        @Value("\${server.port:8080}")
+        @Value("\${server.port:8080}") private val serverPort: Int,
         restTemplateBuilder: RestTemplateBuilder
 ) {
 
@@ -18,7 +18,7 @@ class HealthScheduledService(
 
     @Scheduled(fixedRate = 1000 * 60 * 15)
     fun checkHealth() {
-        val status = restTemplate.getForObject("http://localhost:8080/actuator/health", Status::class.java)
+        val status = restTemplate.getForObject("http://localhost:$serverPort/actuator/health", Status::class.java)
         logger.debug(status!!.status)
     }
 }
