@@ -36,7 +36,7 @@ class ScheduledNotificationService(
         notifications.forEach { notification ->
             bot.sendMessageText(
                     notification.chatId,
-                    "Цена за акцию `${notification.ticker}` достигла `$currentPrice $currency`"
+                    "Цена за акцию `${notification.ticker}` достигла `${currentPrice.setScale(2)} $currency`"
             )
         }
 
