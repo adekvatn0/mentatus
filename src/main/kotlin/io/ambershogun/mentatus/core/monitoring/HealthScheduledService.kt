@@ -1,12 +1,14 @@
 package io.ambershogun.mentatus.core.monitoring
 
 import org.slf4j.LoggerFactory
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.web.client.RestTemplateBuilder
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Service
 
 @Service
 class HealthScheduledService(
+        @Value("\${server.port:8080}")
         restTemplateBuilder: RestTemplateBuilder
 ) {
 
