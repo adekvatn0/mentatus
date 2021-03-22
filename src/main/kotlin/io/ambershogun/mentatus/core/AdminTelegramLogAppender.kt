@@ -14,14 +14,24 @@ class AdminTelegramLogAppender(
         private val bot: MentatusBot
 ) : UnsynchronizedAppenderBase<ILoggingEvent>(), SmartLifecycle {
     override fun append(event: ILoggingEvent) {
-        ThrowableProxyUtil.asString(event.throwableProxy)
         bot.sendMessageText(
                 appPropertis.adminId,
-                event.message + "\n\n" + ThrowableProxyUtil.asString(event.throwableProxy)
+                LOGGER_PREFIX + event.message + "\n\n" + ThrowableProxyUtil.asString(event.throwableProxy)
         )
     }
 
     override fun isRunning(): Boolean {
         return isStarted
+    }
+
+    override fun start() {
+        bot.sendMessageText(
+                appPropertis.adminId,
+                LOGGER_PREFIX + "Mentatus bot started!"
+        )
+    }
+
+    companion object {
+        const val LOGGER_PREFIX = "=== SYSTEM LOGGING ===\n\n"
     }
 }
