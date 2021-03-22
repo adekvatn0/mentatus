@@ -16,6 +16,8 @@ class AddPriceNotificationMessageHandlerTest : AbstractMessageHandlerTest() {
     lateinit var messageHandler: AddPriceNotificationMessageHandler
 
     override fun `test message regex`() {
+        assertTrue(("nok < 5".matches(Regex(messageHandler.messageRegEx()))))
+        assertTrue(("nok < 5.".matches(Regex(messageHandler.messageRegEx()))))
         assertTrue(("mrna<100").matches(Regex(messageHandler.messageRegEx())))
         assertTrue(("MRNA  >   100.0").matches(Regex(messageHandler.messageRegEx())))
         assertTrue(("MrNa<  100,000").matches(Regex(messageHandler.messageRegEx())))

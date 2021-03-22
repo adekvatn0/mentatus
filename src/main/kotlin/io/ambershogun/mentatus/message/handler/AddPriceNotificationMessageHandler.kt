@@ -11,7 +11,7 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage
 class AddPriceNotificationMessageHandler(
         private var priceNotificationService: PriceNotificationService
 ) : AbstractMessageHandler() {
-    override fun messageRegEx() = "[a-zA-Z].*( )*(<|>)( )*[0-9].*(.|,)*[0-9].*"
+    override fun messageRegEx() = "^\\w+(\\s+|)(<|>)(\\s+|)\\d+(.|,|)(\\d+|)"
 
     override fun handleMessageInternal(user: User, inputMessage: String): SendMessage {
         return try {
