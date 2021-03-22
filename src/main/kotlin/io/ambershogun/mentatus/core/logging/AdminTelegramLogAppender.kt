@@ -1,4 +1,4 @@
-package io.ambershogun.mentatus.core
+package io.ambershogun.mentatus.core.logging
 
 import ch.qos.logback.classic.spi.ILoggingEvent
 import ch.qos.logback.classic.spi.ThrowableProxyUtil

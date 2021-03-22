@@ -8,6 +8,10 @@
         <appender-ref ref="CONSOLE"/>
     </root>
 
+    <logger name="health" level="DEBUG" additivity="false">
+        <appender-ref ref="CONSOLE"/>
+    </logger>
+
     <logger name="messaging" level="DEBUG" additivity="false">
         <appender-ref ref="CONSOLE"/>
     </logger>
