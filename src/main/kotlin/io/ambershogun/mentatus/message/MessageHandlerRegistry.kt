@@ -13,7 +13,7 @@ class MessageHandlerRegistry {
 
     fun getHandler(inputMessage: String): MessageHandler {
         return registry.entries.stream()
-                .filter { e -> inputMessage.matches(Regex(e.value.messageRegEx())) }
+                .filter { e -> inputMessage.toLowerCase().matches(Regex(e.value.messageRegEx())) }
                 .findFirst()
                 .map { e -> e.value }
                 .orElseThrow { UnsupportedOperationException(inputMessage) }
