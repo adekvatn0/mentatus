@@ -40,15 +40,16 @@ class PriceNotificationService(
 
         val ticker = parts[0].trim().toUpperCase()
 
-        val yahooFinanceTickerName = stockService.getYahooFinanceTickerName(ticker)
+        val stock = stockService.getStock(ticker)
                 ?: throw StockNotFoundException(ticker)
 
         return notificationRepository.save(
                 PriceNotification(
                         chatId,
-                        yahooFinanceTickerName,
+                        stock.symbol,
                         getEquitySign(inputMessage),
-                        price.toDouble()
+                        price.toDouble(),
+                        stock.currency
                 )
         )
     }

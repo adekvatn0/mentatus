@@ -7,7 +7,7 @@ import org.mockito.ArgumentMatchers.anyString
 import org.mockito.Mockito
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.util.CollectionUtils
-import java.math.BigDecimal
+import yahoofinance.Stock
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
@@ -18,14 +18,14 @@ class PriceNotificationServiceTest : AbstractTest() {
 
     @Test(expected = StockNotFoundException::class)
     fun `when failed to find correct ticker then exception`() {
-        Mockito.`when`(stockService.getYahooFinanceTickerName(anyString())).thenReturn(null)
+        Mockito.`when`(stockService.getStock(anyString())).thenReturn(null)
 
         priceNotificationService.createNotification(1, "sber > 100")
     }
 
     @Test
     fun `when create with wrong ticker then try to find corrent`() {
-        Mockito.`when`(stockService.getYahooFinanceTickerName(anyString())).thenReturn("SBER.ME")
+        Mockito.`when`(stockService.getStock(anyString())).thenReturn(Stock("SBER.ME").apply { currency = "USD" })
 
         val notification = priceNotificationService.createNotification(1, "sber > 100")
 

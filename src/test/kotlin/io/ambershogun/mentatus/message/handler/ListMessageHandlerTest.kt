@@ -29,7 +29,7 @@ class ListNotificationsMessageHandlerTest : AbstractMessageHandlerTest() {
         }
 
         run {
-            val notification = priceNotificationRepository.save(PriceNotification(1, "MRNA", EquitySign.GREATER, 100.00))
+            val notification = priceNotificationRepository.save(PriceNotification(1, "MRNA", EquitySign.GREATER, 100.00, "USD"))
 
             val response = messageHandler.handleMessage(1, "ru", "list")
             val notificationsListString = listOf(notification).stream()

@@ -9,13 +9,14 @@ class PriceNotification(
         var chatId: Long,
         var ticker: String,
         var equitySign: EquitySign,
-        var price: Double
+        var price: Double,
+        var currency: String
 ) {
 
     @Id
     var id: String? = null
 
     override fun toString(): String {
-        return "`${ticker} ${equitySign.sign} ${BigDecimal.valueOf(price).setScale(2)}`"
+        return "`${ticker} ${equitySign.sign} ${BigDecimal.valueOf(price).setScale(2)} $currency`"
     }
 }

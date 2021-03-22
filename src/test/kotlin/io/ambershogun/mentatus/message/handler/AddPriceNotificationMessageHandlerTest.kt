@@ -1,10 +1,11 @@
 package io.ambershogun.mentatus.message.handler
 
+import io.ambershogun.mentatus.notification.price.EquitySign
+import io.ambershogun.mentatus.notification.price.PriceNotification
 import org.junit.Test
 import org.mockito.ArgumentMatchers.anyString
 import org.mockito.Mockito
 import org.springframework.beans.factory.annotation.Autowired
-import java.math.BigDecimal
 import java.util.*
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
@@ -29,14 +30,17 @@ class AddPriceNotificationMessageHandlerTest : AbstractMessageHandlerTest() {
     override fun `test handle message`() {
         val response = messageHandler.handleMessage(1, "ru", "mrna > 100")
         assertEquals(
-                messageSource.getMessage("notification.add", arrayOf("MRNA", BigDecimal.valueOf(100.00)), Locale.forLanguageTag("ru")),
+                messageSource.getMessage("notification.add",
+                        arrayOf(PriceNotification(1, "MRNA", EquitySign.GREATER, 100.00, "USD")),
+                        Locale.forLanguageTag("ru")
+                ),
                 response.text
         )
     }
 
     @Test
     fun `test stock not found by ticker`() {
-        Mockito.`when`(stockService.getYahooFinanceTickerName(anyString())).thenReturn(null)
+        Mockito.`when`(stockService.getStock(anyString())).thenReturn(null)
 
         val response = messageHandler.handleMessage(1, "ru", "mrna > 100")
         assertEquals(

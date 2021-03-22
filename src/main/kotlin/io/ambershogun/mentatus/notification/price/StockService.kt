@@ -11,15 +11,15 @@ class StockService {
         return YahooFinance.get(tickers)
     }
 
-    fun getYahooFinanceTickerName(ticker: String): String? {
+    fun getStock(ticker: String): Stock? {
         val stock = YahooFinance.get(ticker)
         if (stock != null) {
-            return stock.symbol
+            return stock
         }
 
         val moscowExchangeStock = YahooFinance.get("$ticker.ME")
         if (moscowExchangeStock != null) {
-            return moscowExchangeStock.symbol
+            return moscowExchangeStock
         }
 
         return null

@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.junit4.SpringRunner
+import yahoofinance.Stock
 
 @RunWith(SpringRunner::class)
 @SpringBootTest
@@ -26,9 +27,9 @@ abstract class AbstractTest {
     fun init() {
         priceNotificationRepository.deleteAll()
 
-        Mockito.`when`(stockService.getYahooFinanceTickerName(ArgumentMatchers.anyString())).thenAnswer {
+        Mockito.`when`(stockService.getStock(ArgumentMatchers.anyString())).thenAnswer {
             val args: Array<Any> = it.arguments
-            return@thenAnswer args[0] as String
+            return@thenAnswer Stock(args[0] as String).apply { currency = "USD" }
         }
     }
 
