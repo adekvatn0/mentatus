@@ -16,7 +16,7 @@ abstract class AbstractMessageHandler : MessageHandler {
     @Autowired
     lateinit var messageSource: MessageSource
 
-    final override fun handleMessage(chatId: Long, languageCode: String, inputMessage: String): SendMessage {
+    final override fun handleMessage(chatId: Long, languageCode: String, inputMessage: String): List<SendMessage> {
         val user = userService.findOrCreateUser(chatId, languageCode)
 
         user.lastActive = LocalDateTime.now()
@@ -37,5 +37,5 @@ abstract class AbstractMessageHandler : MessageHandler {
         }
     }
 
-    protected abstract fun handleMessageInternal(user: User, inputMessage: String): SendMessage
+    protected abstract fun handleMessageInternal(user: User, inputMessage: String): List<SendMessage>
 }

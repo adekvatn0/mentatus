@@ -19,7 +19,7 @@ class CleanMessageHandlerTest: AbstractMessageHandlerTest() {
         val response = messageHandler.handleMessage(1, "ru", "clean")
         kotlin.test.assertEquals(
                 messageSource.getMessage("notification.clean", emptyArray(), Locale.forLanguageTag("ru")),
-                response.text
+                response[0].text
         )
     }
 

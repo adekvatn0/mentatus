@@ -18,8 +18,8 @@ class MessageHandlerRegistryTest : AbstractTest() {
                 return "^test$"
             }
 
-            override fun handleMessage(chatId: Long, languageCode: String, inputMessage: String): SendMessage {
-                return SendMessage()
+            override fun handleMessage(chatId: Long, languageCode: String, inputMessage: String): List<SendMessage> {
+                return listOf(SendMessage())
             }
         })
 

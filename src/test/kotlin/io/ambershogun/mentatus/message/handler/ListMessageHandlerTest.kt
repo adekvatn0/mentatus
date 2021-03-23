@@ -15,7 +15,7 @@ class ListNotificationsMessageHandlerTest : AbstractMessageHandlerTest() {
     lateinit var messageHandler: ListNotificationsMessageHandler
 
     override fun `test message regex`() {
-        assertTrue("list".matches(Regex(messageHandler.messageRegEx())))
+        assertTrue("\uD83D\uDD14 уведомления".matches(Regex(messageHandler.messageRegEx())))
         assertFalse("any string".matches(Regex(messageHandler.messageRegEx())))
     }
 
@@ -24,7 +24,7 @@ class ListNotificationsMessageHandlerTest : AbstractMessageHandlerTest() {
             val response = messageHandler.handleMessage(1, "ru", "list")
             assertEquals(
                     messageSource.getMessage("notification.list.empty", emptyArray(), Locale.forLanguageTag("ru")),
-                    response.text
+                    response[0].text
             )
         }
 
@@ -38,7 +38,7 @@ class ListNotificationsMessageHandlerTest : AbstractMessageHandlerTest() {
 
             assertEquals(
                     messageSource.getMessage("notification.list", arrayOf(notificationsListString), Locale.forLanguageTag("ru")),
-                    response.text
+                    response[0].text
             )
         }
     }

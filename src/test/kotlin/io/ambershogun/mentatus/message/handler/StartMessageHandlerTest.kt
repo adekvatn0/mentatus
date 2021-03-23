@@ -20,7 +20,7 @@ class StartMessageHandlerTest : AbstractMessageHandlerTest() {
         val response = messageHandler.handleMessage(1, "ru", "/start")
         assertEquals(
                 messageSource.getMessage("start", emptyArray(), Locale.forLanguageTag("ru")),
-                response.text
+                response[0].text
         )
     }
 

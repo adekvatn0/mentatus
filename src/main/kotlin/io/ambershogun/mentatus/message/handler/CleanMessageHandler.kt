@@ -12,9 +12,9 @@ class CleanMessageHandler(
 ) : AbstractMessageHandler() {
     override fun messageRegEx() = "^clean$"
 
-    override fun handleMessageInternal(user: User, inputMessage: String): SendMessage {
+    override fun handleMessageInternal(user: User, inputMessage: String): List<SendMessage> {
         priceNotificationService.deleteAllByUser(user.chatId)
 
-        return createMessage(user, "notification.clean")
+        return listOf(createMessage(user, "notification.clean"))
     }
 }

@@ -8,7 +8,7 @@ interface MessageHandler {
     fun messageRegEx(): String
 
     @Transactional
-    fun handleMessage(chatId: Long, languageCode: String, inputMessage: String): SendMessage
+    fun handleMessage(chatId: Long, languageCode: String, inputMessage: String): List<SendMessage>
 
     @Autowired
     fun selfRegister(registry: MessageHandlerRegistry) {

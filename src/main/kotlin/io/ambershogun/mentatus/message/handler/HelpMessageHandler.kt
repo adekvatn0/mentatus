@@ -9,7 +9,7 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage
 class HelpMessageHandler : AbstractMessageHandler() {
     override fun messageRegEx() = "^help$"
 
-    override fun handleMessageInternal(user: User, inputMessage: String): SendMessage {
-        return createMessage(user, "help")
+    override fun handleMessageInternal(user: User, inputMessage: String): List<SendMessage> {
+        return listOf(createMessage(user, "help"))
     }
 }

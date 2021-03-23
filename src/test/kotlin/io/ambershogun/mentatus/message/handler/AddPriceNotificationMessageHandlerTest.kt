@@ -34,7 +34,7 @@ class AddPriceNotificationMessageHandlerTest : AbstractMessageHandlerTest() {
                         arrayOf(PriceNotification(1, "MRNA", EquitySign.GREATER, 100.00, "USD")),
                         Locale.forLanguageTag("ru")
                 ),
-                response.text
+                response[0].text
         )
     }
 
@@ -45,7 +45,7 @@ class AddPriceNotificationMessageHandlerTest : AbstractMessageHandlerTest() {
         val response = messageHandler.handleMessage(1, "ru", "mrna > 100")
         assertEquals(
                 messageSource.getMessage("notification.add.stock.not.found", emptyArray(), Locale.forLanguageTag("ru")),
-                response.text
+                response[0].text
         )
     }
 }

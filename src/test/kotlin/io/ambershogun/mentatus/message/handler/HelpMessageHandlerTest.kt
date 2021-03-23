@@ -19,7 +19,7 @@ class HelpMessageHandlerTest : AbstractMessageHandlerTest() {
         val response = messageHandler.handleMessage(1, "ru", "help")
         kotlin.test.assertEquals(
                 messageSource.getMessage("help", emptyArray(), Locale.forLanguageTag("ru")),
-                response.text
+                response[0].text
         )
     }
 }

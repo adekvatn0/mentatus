@@ -23,18 +23,21 @@ final class MentatusBot(
     }
 
     override fun onUpdateReceived(update: Update) {
-        val chatId = update.message.chatId
-        val languageCode = update.message.from.languageCode
-        val inputMessage = update.message.text
+        if (update.message != null) {
+            val chatId = update.message.chatId
+            val languageCode = update.message.from.languageCode
+            val inputMessage = update.message.text
 
-        try {
-            val handler = registry.getHandler(inputMessage)
+            try {
+                val handler = registry.getHandler(inputMessage)
 
-            val responseMessage = handler.handleMessage(chatId, languageCode, inputMessage)
+                val messages = handler.handleMessage(chatId, languageCode, inputMessage)
+                messages.forEach(this::execute)
+            } catch (e: Exception) {
+                logger.error("Error while handling message: chatId = $chatId, message = $inputMessage", e)
+            }
+        } else if(update.callbackQuery != null) {
 
-            execute(responseMessage)
-        } catch (e: Exception) {
-            logger.error("Error while handling message: chatId = $chatId, message = $inputMessage", e)
         }
     }
 
