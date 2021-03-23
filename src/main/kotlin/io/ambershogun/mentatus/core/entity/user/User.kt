@@ -7,8 +7,7 @@ import java.time.LocalDateTime
 @Document(collection = "User")
 class User(
         @Id
-        var chatId: Long,
-        var locale: String
+        var chatId: Long
 ) {
     var lastActive: LocalDateTime? = null
 }

@@ -1,4 +1,4 @@
-package io.ambershogun.mentatus.core.message.handler
+package io.ambershogun.mentatus.core.messaging.handler
 
 import io.ambershogun.mentatus.AbstractTest
 import org.junit.Test

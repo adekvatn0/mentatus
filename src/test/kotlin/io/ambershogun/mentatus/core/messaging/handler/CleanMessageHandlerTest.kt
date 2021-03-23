@@ -1,10 +1,13 @@
-package io.ambershogun.mentatus.core.message.handler
+package io.ambershogun.mentatus.core.messaging.handler
 
-import org.junit.jupiter.api.Assertions.*
+import io.ambershogun.mentatus.core.messaging.handler.message.CleanMessageHandler
+import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.springframework.beans.factory.annotation.Autowired
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage
 import java.util.*
 
-class CleanMessageHandlerTest: AbstractMessageHandlerTest() {
+class CleanMessageHandlerTest : AbstractMessageHandlerTest() {
 
     @Autowired
     lateinit var messageHandler: CleanMessageHandler
@@ -15,10 +18,10 @@ class CleanMessageHandlerTest: AbstractMessageHandlerTest() {
     }
 
     override fun `test handle message`() {
-        val response = messageHandler.handleMessage(1, "ru", "clean")
+        val response = messageHandler.handleMessage(1, "clean")
         kotlin.test.assertEquals(
                 messageSource.getMessage("notification.clean", emptyArray(), Locale.forLanguageTag("ru")),
-                response[0].text
+                (response[0] as SendMessage).text
         )
     }
 

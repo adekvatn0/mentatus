@@ -1,33 +1,34 @@
-package io.ambershogun.mentatus.core.message
+package io.ambershogun.mentatus.core.messaging
 
 import io.ambershogun.mentatus.AbstractTest
+import io.ambershogun.mentatus.core.messaging.handler.message.MessageHandler
 import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage
 import kotlin.test.assertNotNull
 
-class MessageHandlerRegistryTest : AbstractTest() {
+class HandlerRegistryTest : AbstractTest() {
 
     @Autowired
-    lateinit var messageHandlerRegistry: MessageHandlerRegistry
+    lateinit var handlerRegistry: HandlerRegistry
 
     @Test
     fun `test registry`() {
-        messageHandlerRegistry.register(object : MessageHandler {
+        handlerRegistry.register(object : MessageHandler {
             override fun messageRegEx(): String {
                 return "^test$"
             }
 
-            override fun handleMessage(chatId: Long, languageCode: String, inputMessage: String): List<SendMessage> {
+            override fun handleMessage(chatId: Long, inputMessage: String): List<SendMessage> {
                 return listOf(SendMessage())
             }
         })
 
-        assertNotNull(messageHandlerRegistry.getHandler("test"))
+        assertNotNull(handlerRegistry.getMessageHandler("test"))
     }
 
     @Test(expected = UnsupportedOperationException::class)
     fun `test unknown message`() {
-        messageHandlerRegistry.getHandler("strange message")
+        handlerRegistry.getMessageHandler("strange message")
     }
 }

@@ -1,11 +1,11 @@
-package io.ambershogun.mentatus.core.message.handler
+package io.ambershogun.mentatus.core.messaging.handler.message
 
-import io.ambershogun.mentatus.core.message.AbstractMessageHandler
 import io.ambershogun.mentatus.core.entity.notification.price.service.PriceNotificationService
 import io.ambershogun.mentatus.core.entity.notification.price.exception.StockNotFoundException
 import io.ambershogun.mentatus.core.entity.user.User
 import org.springframework.stereotype.Component
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage
+import org.telegram.telegrambots.meta.api.methods.BotApiMethod
+import org.telegram.telegrambots.meta.api.objects.Message
 
 @Component
 class AddPriceNotificationMessageHandler(
@@ -13,12 +13,12 @@ class AddPriceNotificationMessageHandler(
 ) : AbstractMessageHandler() {
     override fun messageRegEx() = "^\\w+(\\s+|)(<|>)(\\s+|)\\d+(.|,|)(\\d+|)"
 
-    override fun handleMessageInternal(user: User, inputMessage: String): List<SendMessage> {
+    override fun handleMessageInternal(user: User, inputMessage: String): List<BotApiMethod<Message>> {
         return try {
             val priceNotification = priceNotificationService.createNotification(user.chatId, inputMessage)
 
             listOf(
-                    createMessage(
+                    createSendMessage(
                             user,
                             "notification.add",
                             priceNotification.toString()
@@ -26,7 +26,7 @@ class AddPriceNotificationMessageHandler(
             )
         } catch (e: StockNotFoundException) {
             listOf(
-                    createMessage(user, "notification.add.stock.not.found")
+                    createSendMessage(user, "notification.add.stock.not.found")
             )
         }
     }

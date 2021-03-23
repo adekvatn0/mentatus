@@ -8,11 +8,9 @@ import org.springframework.stereotype.Service
 class UserService(
         private val userRepository: UserRepository
 ) {
-    fun findOrCreateUser(chatId: Long, languageCode: String): User {
+    fun findOrCreateUser(chatId: Long): User {
         return userRepository.findById(chatId)
-                .orElseGet {
-                    User(chatId, languageCode)
-                }
+                .orElseGet { User(chatId) }
     }
 
     fun saveUser(user: User) {

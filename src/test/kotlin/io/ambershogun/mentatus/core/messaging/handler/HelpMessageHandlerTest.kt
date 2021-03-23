@@ -1,7 +1,10 @@
-package io.ambershogun.mentatus.core.message.handler
+package io.ambershogun.mentatus.core.messaging.handler
 
-import org.junit.jupiter.api.Assertions.*
+import io.ambershogun.mentatus.core.messaging.handler.message.HelpMessageHandler
+import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.springframework.beans.factory.annotation.Autowired
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage
 import java.util.*
 
 class HelpMessageHandlerTest : AbstractMessageHandlerTest() {
@@ -10,15 +13,15 @@ class HelpMessageHandlerTest : AbstractMessageHandlerTest() {
     lateinit var messageHandler: HelpMessageHandler
 
     override fun `test message regex`() {
-        assertTrue("help".matches(Regex(messageHandler.messageRegEx())))
+        assertTrue("помощь".matches(Regex(messageHandler.messageRegEx())))
         assertFalse("any string".matches(Regex(messageHandler.messageRegEx())))
     }
 
     override fun `test handle message`() {
-        val response = messageHandler.handleMessage(1, "ru", "help")
+        val response = messageHandler.handleMessage(1, "help")
         kotlin.test.assertEquals(
                 messageSource.getMessage("help", emptyArray(), Locale.forLanguageTag("ru")),
-                response[0].text
+                (response[0] as SendMessage).text
         )
     }
 }

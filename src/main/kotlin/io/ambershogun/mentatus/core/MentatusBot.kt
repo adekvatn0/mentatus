@@ -1,7 +1,7 @@
 package io.ambershogun.mentatus.core
 
+import io.ambershogun.mentatus.core.messaging.HandlerRegistry
 import io.ambershogun.mentatus.core.properties.AppProperties
-import io.ambershogun.mentatus.core.message.MessageHandlerRegistry
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 import org.telegram.telegrambots.bots.TelegramLongPollingBot
@@ -13,7 +13,7 @@ import org.telegram.telegrambots.updatesreceivers.DefaultBotSession
 @Component
 final class MentatusBot(
         private val appProperties: AppProperties,
-        private val registry: MessageHandlerRegistry
+        private val registry: HandlerRegistry
 ) : TelegramLongPollingBot() {
 
     private val logger = LoggerFactory.getLogger("messaging")
@@ -23,9 +23,13 @@ final class MentatusBot(
     }
 
     override fun onUpdateReceived(update: Update) {
-        when (getInputMessageType(update)) {
-            MessageType.MESSAGE -> handleMessage(update)
-            MessageType.CALLBACK -> handleCallback(update)
+        try {
+            when (getInputMessageType(update)) {
+                MessageType.MESSAGE -> handleMessage(update)
+                MessageType.CALLBACK -> handleCallback(update)
+            }
+        } catch (e: Exception) {
+            logger.error("Error while handling message: $update", e)
         }
     }
 
@@ -42,22 +46,24 @@ final class MentatusBot(
 
     private fun handleMessage(update: Update) {
         val chatId = update.message.chatId
-        val languageCode = update.message.from.languageCode
         val inputMessage = update.message.text
 
-        try {
-            val handler = registry.getHandler(inputMessage)
+        val responseMessages = registry.getMessageHandler(inputMessage)
+                .handleMessage(chatId, inputMessage)
 
-            val messages = handler.handleMessage(chatId, languageCode, inputMessage)
-            messages.forEach(this::execute)
-        } catch (e: Exception) {
-            logger.error("Error while handling message: chatId = $chatId, message = $inputMessage", e)
-        }
+        responseMessages.forEach(this::execute)
     }
 
     private fun handleCallback(update: Update) {
-        print("Not yet implemented")
-        TODO("Not yet implemented")
+        val chatId = update.callbackQuery.message.chat.id
+        val callbackQueryId = update.callbackQuery.id
+        val messageId = update.callbackQuery.message.messageId
+        val data = update.callbackQuery.data
+
+        val responseMessage = registry.getCallbackHandler(data)
+                .handleCallback(chatId, callbackQueryId, messageId, data)
+
+        responseMessage.forEach(this::execute)
     }
 
     fun sendMessageText(chatId: Long, text: String) {

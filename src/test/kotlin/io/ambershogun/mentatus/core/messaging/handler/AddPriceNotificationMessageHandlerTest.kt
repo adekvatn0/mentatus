@@ -1,11 +1,13 @@
-package io.ambershogun.mentatus.core.message.handler
+package io.ambershogun.mentatus.core.messaging.handler
 
 import io.ambershogun.mentatus.core.entity.notification.price.EquitySign
 import io.ambershogun.mentatus.core.entity.notification.price.PriceNotification
+import io.ambershogun.mentatus.core.messaging.handler.message.AddPriceNotificationMessageHandler
 import org.junit.Test
 import org.mockito.ArgumentMatchers.anyString
 import org.mockito.Mockito
 import org.springframework.beans.factory.annotation.Autowired
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage
 import java.util.*
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
@@ -28,13 +30,13 @@ class AddPriceNotificationMessageHandlerTest : AbstractMessageHandlerTest() {
     }
 
     override fun `test handle message`() {
-        val response = messageHandler.handleMessage(1, "ru", "mrna > 100")
+        val response = messageHandler.handleMessage(1, "mrna > 100")
         assertEquals(
                 messageSource.getMessage("notification.add",
                         arrayOf(PriceNotification(1, "MRNA", EquitySign.GREATER, 100.00, "USD")),
                         Locale.forLanguageTag("ru")
                 ),
-                response[0].text
+                (response[0] as SendMessage).text
         )
     }
 
@@ -42,10 +44,10 @@ class AddPriceNotificationMessageHandlerTest : AbstractMessageHandlerTest() {
     fun `test stock not found by ticker`() {
         Mockito.`when`(stockService.getStock(anyString())).thenReturn(null)
 
-        val response = messageHandler.handleMessage(1, "ru", "mrna > 100")
+        val response = messageHandler.handleMessage(1, "mrna > 100")
         assertEquals(
                 messageSource.getMessage("notification.add.stock.not.found", emptyArray(), Locale.forLanguageTag("ru")),
-                response[0].text
+                (response[0] as SendMessage).text
         )
     }
 }

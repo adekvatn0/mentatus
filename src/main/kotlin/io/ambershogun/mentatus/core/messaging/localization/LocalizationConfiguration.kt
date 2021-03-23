@@ -1,4 +1,4 @@
-package io.ambershogun.mentatus.core.message.localization
+package io.ambershogun.mentatus.core.messaging.localization
 
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration

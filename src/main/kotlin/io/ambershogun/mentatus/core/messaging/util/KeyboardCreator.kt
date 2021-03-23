@@ -1,8 +1,6 @@
-package io.ambershogun.mentatus.core.message.util
+package io.ambershogun.mentatus.core.messaging.util
 
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow
 import java.util.*
 
@@ -22,16 +20,5 @@ object KeyboardCreator {
         }
         replyKeyboardMarkup.keyboard = keyboard
         return replyKeyboardMarkup
-    }
-
-    fun createNotificationDeleteButton(notificationId: String?): InlineKeyboardMarkup {
-        return InlineKeyboardMarkup(
-                listOf(
-                        listOf(InlineKeyboardButton().apply {
-                            text = "\uD83D\uDD15 Удалить"
-                            callbackData = "delete:$notificationId"
-                        })
-                )
-        )
     }
 }
