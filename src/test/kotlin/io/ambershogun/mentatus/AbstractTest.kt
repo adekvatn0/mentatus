@@ -1,7 +1,7 @@
 package io.ambershogun.mentatus
 
-import io.ambershogun.mentatus.notification.price.PriceNotificationRepository
-import io.ambershogun.mentatus.notification.price.StockService
+import io.ambershogun.mentatus.core.entity.notification.price.repo.PriceNotificationRepository
+import io.ambershogun.mentatus.core.entity.notification.price.service.StockService
 import org.junit.After
 import org.junit.Before
 import org.junit.runner.RunWith

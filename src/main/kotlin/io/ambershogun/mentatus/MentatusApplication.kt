@@ -2,7 +2,7 @@ package io.ambershogun.mentatus
 
 import ch.qos.logback.classic.Logger
 import ch.qos.logback.classic.LoggerContext
-import io.ambershogun.mentatus.core.logging.AdminTelegramLogAppender
+import io.ambershogun.mentatus.logging.AdminTelegramLogAppender
 import org.slf4j.LoggerFactory
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.context.properties.EnableConfigurationProperties
