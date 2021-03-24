@@ -1,14 +1,16 @@
 package io.ambershogun.mentatus.monitoring
 
+import io.ambershogun.mentatus.core.properties.AppProperties
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.web.client.RestTemplateBuilder
+import org.springframework.http.ResponseEntity
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Service
 
 @Service
-class HealthScheduledService(
-        @Value("\${server.port:8080}") private val serverPort: Int,
+class SelfPingScheduledService(
+        private val appProperties: AppProperties,
         restTemplateBuilder: RestTemplateBuilder
 ) {
 
@@ -16,13 +18,9 @@ class HealthScheduledService(
 
     private val restTemplate = restTemplateBuilder.build()
 
-    @Scheduled(fixedRate = 1000 * 60 * 1)
-    fun checkHealth() {
-        val status = restTemplate.getForObject("http://localhost:$serverPort/actuator/health", Status::class.java)
-        logger.debug(status!!.status)
+    @Scheduled(fixedRate = 1000 * 60 * 5)
+    fun pingSelf() {
+        val response = restTemplate.getForEntity(appProperties.url, String::class.java)
+        logger.debug(response.body)
     }
-}
-
-class Status {
-    var status: String? = null
 }

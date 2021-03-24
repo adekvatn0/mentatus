@@ -1,5 +1,6 @@
 mentatus:
   admin-id: 577342267
+  url: ${SERVER_URL:http://localhost:8080}
   bot:
     name: Ментат Сирил
     token: 1188186144:AAFiQqu82QyxGljhJr7TeQ2VH_W775GnyQU

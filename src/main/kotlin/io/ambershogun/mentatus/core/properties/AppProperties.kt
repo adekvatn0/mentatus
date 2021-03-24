@@ -7,5 +7,6 @@ import org.springframework.stereotype.Component
 @ConfigurationProperties("mentatus")
 class AppProperties {
     var adminId: Long = 0
+    var url: String = ""
     var bot = BotProperties()
 }
