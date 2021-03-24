@@ -16,7 +16,7 @@ class HealthScheduledService(
 
     private val restTemplate = restTemplateBuilder.build()
 
-    @Scheduled(fixedRate = 1000 * 60 * 15)
+    @Scheduled(fixedRate = 1000 * 60 * 1)
     fun checkHealth() {
         val status = restTemplate.getForObject("http://localhost:$serverPort/actuator/health", Status::class.java)
         logger.debug(status!!.status)
