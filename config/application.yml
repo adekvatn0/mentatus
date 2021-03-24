@@ -15,7 +15,7 @@ logging:
         data:
           mongodb:
             core:
-              MongoTemplate: DEBUG
+              MongoTemplate: ${MONGO_LOG_LEVEL:INFO}
 
 newsapi:
   token: abe624afba93421baf6ac05e9ac386b5
