@@ -35,7 +35,7 @@ class StockInfoMessageHandler(
     }
 
     private fun getTicker(inputMessage: String): String {
-        return inputMessage.dropLast(1)
+        return inputMessage.replace(" ", "").dropLast(1)
     }
 
 }
