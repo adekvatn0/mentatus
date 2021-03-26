@@ -12,9 +12,13 @@ class FeedbackMessageHandler : AbstractMessageHandler() {
     }
 
     override fun handleMessageInternal(user: User, inputMessage: String): List<BotApiMethod<Message>> {
-        return listOf(responseService.createSendMessage(
+        val message = responseService.createSendMessage(
                 user.chatId.toString(),
                 "feedback"
-        ))
+        )
+
+        message.enableMarkdown(false)
+
+        return listOf(message)
     }
 }
