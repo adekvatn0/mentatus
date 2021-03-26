@@ -13,18 +13,26 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 class ListNotificationsMessageHandler(
         private var priceNotificationService: PriceNotificationService
 ) : AbstractMessageHandler() {
-    override fun messageRegEx() = ".*уведомления$"
+    override fun messageRegEx() = ".*Уведомления$"
 
     override fun handleMessageInternal(user: User, inputMessage: String): List<BotApiMethod<Message>> {
         val priceNotifications = priceNotificationService.findAllByUser(user.chatId)
         if (priceNotifications.isEmpty()) {
-            return listOf(createSendMessage(user, "notification.list.empty"))
+            val message = responseService.createSendMessage(
+                    user.chatId.toString(),
+                    "notification.list.empty"
+            )
+            return listOf(message)
         }
 
         val messages = mutableListOf<SendMessage>()
 
         priceNotifications.forEach {
-            val message = createSendMessage(user, "notification.list", it).apply {
+            val message = responseService.createSendMessage(
+                    user.chatId.toString(),
+                    "notification.list",
+                    it
+            ).apply {
                 replyMarkup = createDeleteButton(it.id!!)
             }
             messages.add(message)

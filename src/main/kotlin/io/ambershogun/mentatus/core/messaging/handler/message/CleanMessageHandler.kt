@@ -15,6 +15,6 @@ class CleanMessageHandler(
     override fun handleMessageInternal(user: User, inputMessage: String): List<BotApiMethod<Message>> {
         priceNotificationService.deleteAllByUser(user.chatId)
 
-        return listOf(createSendMessage(user, "notification.clean"))
+        return listOf(responseService.createSendMessage(user.chatId.toString(), "notification.clean"))
     }
 }

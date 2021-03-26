@@ -17,7 +17,7 @@ class ListNotificationsMessageHandlerTest : AbstractMessageHandlerTest() {
     lateinit var messageHandler: ListNotificationsMessageHandler
 
     override fun `test message regex`() {
-        assertTrue("\uD83D\uDD14 уведомления".matches(Regex(messageHandler.messageRegEx())))
+        assertTrue("\uD83D\uDD14 Уведомления".matches(Regex(messageHandler.messageRegEx())))
         assertFalse("any string".matches(Regex(messageHandler.messageRegEx())))
     }
 

@@ -46,7 +46,7 @@ class AddPriceNotificationMessageHandlerTest : AbstractMessageHandlerTest() {
 
         val response = messageHandler.handleMessage(1, "mrna > 100")
         assertEquals(
-                messageSource.getMessage("notification.add.stock.not.found", emptyArray(), Locale.forLanguageTag("ru")),
+                messageSource.getMessage("stock.not.found", emptyArray(), Locale.forLanguageTag("ru")),
                 (response[0] as SendMessage).text
         )
     }

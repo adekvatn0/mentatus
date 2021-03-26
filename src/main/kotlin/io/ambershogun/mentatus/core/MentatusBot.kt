@@ -1,6 +1,7 @@
 package io.ambershogun.mentatus.core
 
 import io.ambershogun.mentatus.core.messaging.HandlerRegistry
+import io.ambershogun.mentatus.core.messaging.util.ResponseService
 import io.ambershogun.mentatus.core.properties.AppProperties
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
@@ -13,7 +14,8 @@ import org.telegram.telegrambots.updatesreceivers.DefaultBotSession
 @Component
 final class MentatusBot(
         private val appProperties: AppProperties,
-        private val registry: HandlerRegistry
+        private val registry: HandlerRegistry,
+        private val responseService: ResponseService
 ) : TelegramLongPollingBot() {
 
     private val logger = LoggerFactory.getLogger("messaging")
@@ -28,8 +30,20 @@ final class MentatusBot(
                 MessageType.MESSAGE -> handleMessage(update)
                 MessageType.CALLBACK -> handleCallback(update)
             }
-        } catch (e: Exception) {
-            logger.error("Error while handling message: $update", e)
+        } catch (e: UnsupportedOperationException) {
+            val message = responseService.createSendMessage(
+                    getChatId(update),
+                    "message.not.supported"
+            )
+
+            execute(message)
+        }
+    }
+
+    private fun getChatId(update: Update): String {
+        return when (getInputMessageType(update)) {
+            MessageType.MESSAGE -> update.message.chatId.toString()
+            MessageType.CALLBACK -> update.callbackQuery.message.chat.id.toString()
         }
     }
 

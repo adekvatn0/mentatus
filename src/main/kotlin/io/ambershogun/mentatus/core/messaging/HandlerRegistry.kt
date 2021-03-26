@@ -21,7 +21,7 @@ class HandlerRegistry {
 
     fun getMessageHandler(inputMessage: String): MessageHandler {
         return messageHandlers.entries.stream()
-                .filter { e -> inputMessage.toLowerCase().matches(Regex(e.value.messageRegEx())) }
+                .filter { e -> inputMessage.matches(Regex(e.value.messageRegEx())) }
                 .findFirst()
                 .map { e -> e.value }
                 .orElseThrow { UnsupportedOperationException(inputMessage) }
@@ -29,7 +29,7 @@ class HandlerRegistry {
 
     fun getCallbackHandler(data: String): CallbackHandler {
         return callbackHandlers.entries.stream()
-                .filter { e -> data.toLowerCase().matches(Regex(e.value.dataRegEx())) }
+                .filter { e -> data.matches(Regex(e.value.dataRegEx())) }
                 .findFirst()
                 .map { e -> e.value }
                 .orElseThrow { UnsupportedOperationException(data) }

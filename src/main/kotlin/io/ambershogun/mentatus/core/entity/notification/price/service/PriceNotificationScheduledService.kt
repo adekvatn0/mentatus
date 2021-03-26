@@ -8,11 +8,10 @@ import org.springframework.stereotype.Service
 import java.math.BigDecimal
 
 @Service
-class ScheduledNotificationService(
+class PriceNotificationScheduledService(
         private var stockService: StockService,
         private var notificationService: PriceNotificationService,
-        private var bot: MentatusBot,
-        private var messageSource: MessageSource
+        private var bot: MentatusBot
 ) {
 
     @Scheduled(fixedRateString = "\${notification.update-rate-millis}")
@@ -24,6 +23,7 @@ class ScheduledNotificationService(
         }
 
         val stocks = stockService.getStocks(tickers.toTypedArray())
+
         stocks.values.forEach { stock ->
             val ticker = stock.symbol
             notifyUsersAndDeleteNotifications(ticker, stock.quote.price, EquitySign.GREATER, stock.currency)
