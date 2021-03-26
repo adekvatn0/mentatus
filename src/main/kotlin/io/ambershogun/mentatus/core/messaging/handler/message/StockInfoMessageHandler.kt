@@ -12,6 +12,10 @@ class StockInfoMessageHandler(
         private val stockService: StockService
 ) : AbstractMessageHandler() {
 
+    override fun messageRegEx(): String {
+        return "^\\w+(\\s+|)\\?$"
+    }
+
     override fun handleMessageInternal(user: User, inputMessage: String): List<BotApiMethod<Message>> {
         val stock = stockService.getStock(getTicker(inputMessage)) ?: return listOf(
                 responseService.createSendMessage(user.chatId.toString(), "stock.not.found")
@@ -28,10 +32,6 @@ class StockInfoMessageHandler(
         )
 
         return listOf(sendMessage)
-    }
-
-    override fun messageRegEx(): String {
-        return "^\\w+\\?$"
     }
 
     private fun getTicker(inputMessage: String): String {

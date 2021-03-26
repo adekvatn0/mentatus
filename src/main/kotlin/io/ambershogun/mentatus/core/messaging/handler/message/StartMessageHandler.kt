@@ -14,7 +14,7 @@ class StartMessageHandler : AbstractMessageHandler() {
         val message = responseService.createSendMessage(user.chatId.toString(), "start")
         message.replyMarkup = KeyboardCreator.createReplyKeyboard(
                 arrayOf(
-                        arrayOf("\uD83D\uDD14 Уведомления", "\uD83D\uDD30 Помощь"),
+                        arrayOf("\uD83D\uDD14 Уведомления", "\uD83D\uDD30 Справка"),
                         arrayOf("\uD83D\uDCEE Обратная связь")
                 )
         )

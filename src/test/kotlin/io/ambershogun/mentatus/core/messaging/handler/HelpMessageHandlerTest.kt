@@ -13,7 +13,7 @@ class HelpMessageHandlerTest : AbstractMessageHandlerTest() {
     lateinit var messageHandler: HelpMessageHandler
 
     override fun `test message regex`() {
-        assertTrue("\uD83D\uDD30 Помощь".matches(Regex(messageHandler.messageRegEx())))
+        assertTrue("\uD83D\uDD30 Справка".matches(Regex(messageHandler.messageRegEx())))
         assertFalse("any string".matches(Regex(messageHandler.messageRegEx())))
     }
 

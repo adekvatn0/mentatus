@@ -12,6 +12,8 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.junit4.SpringRunner
 import yahoofinance.Stock
+import yahoofinance.quotes.stock.StockQuote
+import java.math.BigDecimal
 
 @RunWith(SpringRunner::class)
 @SpringBootTest
