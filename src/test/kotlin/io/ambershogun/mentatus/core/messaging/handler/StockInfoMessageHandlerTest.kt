@@ -26,9 +26,10 @@ class StockInfoMessageHandlerTest : AbstractMessageHandlerTest() {
     override fun `test handle message`() {
         Mockito.`when`(stockService.getStock(ArgumentMatchers.anyString())).thenAnswer {
             val args: Array<Any> = it.arguments
-            return@thenAnswer Stock(args[0] as String).apply {
+            return@thenAnswer Stock((args[0] as String).toUpperCase()).apply {
                 currency = "USD"
-                quote = StockQuote(args[0] as String).apply {
+                name = "Nokia"
+                quote = StockQuote((args[0] as String).toUpperCase()).apply {
                     price = BigDecimal.valueOf(100)
                     priceAvg50 = BigDecimal.valueOf(50)
                     priceAvg200 = BigDecimal.valueOf(200)
@@ -43,9 +44,10 @@ class StockInfoMessageHandlerTest : AbstractMessageHandlerTest() {
                 messageSource.getMessage(
                         "stock.info",
                         arrayOf(
-                                BigDecimal.valueOf(100),
-                                BigDecimal.valueOf(50),
-                                BigDecimal.valueOf(200),
+                                "Nokia (NOK)",
+                                "${BigDecimal.valueOf(100)} USD",
+                                "${BigDecimal.valueOf(50)} USD",
+                                "${BigDecimal.valueOf(200)} USD",
                                 1000L,
                                 2000L
                         ),

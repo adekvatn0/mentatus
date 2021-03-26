@@ -4,7 +4,6 @@ import io.ambershogun.mentatus.core.entity.notification.price.service.StockServi
 import io.ambershogun.mentatus.core.entity.user.User
 import org.springframework.stereotype.Component
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage
 import org.telegram.telegrambots.meta.api.objects.Message
 
 @Component
@@ -24,9 +23,10 @@ class StockInfoMessageHandler(
         val sendMessage = responseService.createSendMessage(
                 user.chatId.toString(),
                 "stock.info",
-                stock.quote.price,
-                stock.quote.priceAvg50,
-                stock.quote.priceAvg200,
+                "${stock.name} (${stock.symbol})",
+                "${stock.quote.price} ${stock.currency}",
+                "${stock.quote.priceAvg50} ${stock.currency}",
+                "${stock.quote.priceAvg200} ${stock.currency}",
                 stock.quote.volume,
                 stock.quote.avgVolume
         )
@@ -38,4 +38,5 @@ class StockInfoMessageHandler(
         return inputMessage.replace(" ", "").dropLast(1)
     }
 
+    override fun isRetryable() = true
 }

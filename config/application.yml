@@ -1,5 +1,6 @@
 mentatus:
   admin-id: 577342267
+  admin-name: "@skazhi_privet"
   url: ${SERVER_URL:http://localhost:8080}
   bot:
     name: Ментат Сирил

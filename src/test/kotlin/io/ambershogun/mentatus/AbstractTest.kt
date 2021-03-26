@@ -31,7 +31,7 @@ abstract class AbstractTest {
 
         Mockito.`when`(stockService.getStock(ArgumentMatchers.anyString())).thenAnswer {
             val args: Array<Any> = it.arguments
-            return@thenAnswer Stock(args[0] as String).apply { currency = "USD" }
+            return@thenAnswer Stock((args[0] as String).toUpperCase()).apply { currency = "USD" }
         }
     }
 

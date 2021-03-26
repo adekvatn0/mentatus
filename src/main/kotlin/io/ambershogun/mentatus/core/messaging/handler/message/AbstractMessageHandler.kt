@@ -4,12 +4,9 @@ import io.ambershogun.mentatus.core.entity.user.User
 import io.ambershogun.mentatus.core.entity.user.service.UserService
 import io.ambershogun.mentatus.core.messaging.util.ResponseService
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.context.MessageSource
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage
 import org.telegram.telegrambots.meta.api.objects.Message
 import java.time.LocalDateTime
-import java.util.*
 
 abstract class AbstractMessageHandler : MessageHandler {
 
@@ -23,6 +20,10 @@ abstract class AbstractMessageHandler : MessageHandler {
         val user = userService.findOrCreateUser(chatId)
 
         user.lastActive = LocalDateTime.now()
+        if (isRetryable()) {
+            user.lastRetryableAction = inputMessage
+        }
+
         userService.saveUser(user)
 
         return handleMessageInternal(user, inputMessage)

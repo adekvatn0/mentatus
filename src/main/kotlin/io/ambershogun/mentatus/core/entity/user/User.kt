@@ -10,4 +10,5 @@ class User(
         var chatId: Long
 ) {
     var lastActive: LocalDateTime? = null
+    var lastRetryableAction: String? = null
 }

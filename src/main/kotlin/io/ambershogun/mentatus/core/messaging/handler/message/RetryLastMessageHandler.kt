@@ -1,27 +1,23 @@
 package io.ambershogun.mentatus.core.messaging.handler.message
 
 import io.ambershogun.mentatus.core.entity.user.User
-import io.ambershogun.mentatus.core.properties.AppProperties
+import io.ambershogun.mentatus.core.messaging.HandlerRegistry
 import org.springframework.stereotype.Component
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod
 import org.telegram.telegrambots.meta.api.objects.Message
 
 @Component
-class FeedbackMessageHandler(
-        private val appProperties: AppProperties
+class RetryLastMessageHandler(
+        private val handlerRegistry: HandlerRegistry
 ) : AbstractMessageHandler() {
+
     override fun messageRegEx(): String {
-        return ".*Обратная связь$"
+        return ".*Повторить$"
     }
 
     override fun handleMessageInternal(user: User, inputMessage: String): List<BotApiMethod<Message>> {
-        val message = responseService.createSendMessage(
-                user.chatId.toString(),
-                "feedback"
-        )
+        val lastRetryableAction = user.lastRetryableAction ?: return emptyList()
 
-        message.enableMarkdown(false)
-
-        return listOf(message)
+        return handlerRegistry.getMessageHandler(lastRetryableAction).handleMessage(user.chatId, lastRetryableAction)
     }
 }
