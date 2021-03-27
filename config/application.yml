@@ -10,7 +10,7 @@ notification:
   update-rate-millis: 10000
 
 marketmaps:
-  dir: ${MAPS_DIR:/target/classes/marketmaps/}
+  dir: ${MAPS_DIR:./target/classes/marketmaps/}
 
 logging:
   config: config/logback.xml
