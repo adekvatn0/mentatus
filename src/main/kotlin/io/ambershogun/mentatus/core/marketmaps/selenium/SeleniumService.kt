@@ -5,18 +5,21 @@ import org.openqa.selenium.By
 import org.openqa.selenium.OutputType
 import org.openqa.selenium.chrome.ChromeDriver
 import org.openqa.selenium.chrome.ChromeOptions
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.scheduling.annotation.Async
 import org.springframework.stereotype.Service
 import java.io.File
 import java.util.concurrent.TimeUnit
 
 @Service
-class SeleniumService {
+class SeleniumService(
+        @Value("\${marketmaps.dir}") private val marketMapsDir: String
+) {
 
     lateinit var driver: ChromeDriver
 
     init {
-        System.setProperty("webdriver.chrome.driver", "./target/classes/marketmaps/chromedriver")
+        System.setProperty("webdriver.chrome.driver", "$marketMapsDir/chromedriver")
     }
 
     @Async
@@ -38,14 +41,14 @@ class SeleniumService {
         driver.get("https://finviz.com/map.ashx")
         val map = driver.findElement(By.id("body"))
         val mapFile = map.getScreenshotAs(OutputType.FILE)
-        FileUtils.copyFile(mapFile, File("./marketmaps/sectors.png"))
+        FileUtils.copyFile(mapFile, File("$marketMapsDir/sectors.png"))
     }
 
     private fun updateRegionsScreenshot() {
         driver.get("https://finviz.com/map.ashx?t=geo")
         val map = driver.findElement(By.id("body"))
         val mapFile = map.getScreenshotAs(OutputType.FILE)
-        FileUtils.copyFile(mapFile, File("./marketmaps/regions.png"))
+        FileUtils.copyFile(mapFile, File("$marketMapsDir/regions.png"))
     }
 }
 
