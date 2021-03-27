@@ -3,6 +3,7 @@ package io.ambershogun.mentatus.core.messaging.handler.message
 import io.ambershogun.mentatus.core.entity.notification.price.service.StockService
 import io.ambershogun.mentatus.core.entity.user.User
 import org.springframework.stereotype.Component
+import org.telegram.telegrambots.meta.api.interfaces.Validable
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod
 import org.telegram.telegrambots.meta.api.objects.Message
 
@@ -15,7 +16,7 @@ class StockInfoMessageHandler(
         return "^\\w+(\\s+|)\\?$"
     }
 
-    override fun handleMessageInternal(user: User, inputMessage: String): List<BotApiMethod<Message>> {
+    override fun handleMessageInternal(user: User, inputMessage: String): List<Validable> {
         val stock = stockService.getStock(getTicker(inputMessage)) ?: return listOf(
                 responseService.createSendMessage(user.chatId.toString(), "stock.not.found")
         )

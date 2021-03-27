@@ -7,7 +7,9 @@ import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 import org.telegram.telegrambots.bots.TelegramLongPollingBot
 import org.telegram.telegrambots.meta.TelegramBotsApi
+import org.telegram.telegrambots.meta.api.methods.send.SendMediaGroup
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage
+import org.telegram.telegrambots.meta.api.methods.updatingmessages.DeleteMessage
 import org.telegram.telegrambots.meta.api.objects.Update
 import org.telegram.telegrambots.updatesreceivers.DefaultBotSession
 
@@ -65,7 +67,13 @@ final class MentatusBot(
         val responseMessages = registry.getMessageHandler(inputMessage)
                 .handleMessage(chatId, inputMessage)
 
-        responseMessages.forEach(this::execute)
+        responseMessages.forEach {
+            when (it.javaClass) {
+                SendMessage::class.java -> execute(it as SendMessage)
+                DeleteMessage::class.java -> execute(it as DeleteMessage)
+                SendMediaGroup::class.java -> execute(it as SendMediaGroup)
+            }
+        }
     }
 
     private fun handleCallback(update: Update) {

@@ -4,8 +4,7 @@ import io.ambershogun.mentatus.core.entity.notification.price.exception.StockNot
 import io.ambershogun.mentatus.core.entity.notification.price.service.PriceNotificationService
 import io.ambershogun.mentatus.core.entity.user.User
 import org.springframework.stereotype.Component
-import org.telegram.telegrambots.meta.api.methods.BotApiMethod
-import org.telegram.telegrambots.meta.api.objects.Message
+import org.telegram.telegrambots.meta.api.interfaces.Validable
 
 @Component
 class AddPriceNotificationMessageHandler(
@@ -13,7 +12,7 @@ class AddPriceNotificationMessageHandler(
 ) : AbstractMessageHandler() {
     override fun messageRegEx() = "^\\w+(\\s+|)(<|>)(\\s+|)\\d+(.|,|)(\\d+|)"
 
-    override fun handleMessageInternal(user: User, inputMessage: String): List<BotApiMethod<Message>> {
+    override fun handleMessageInternal(user: User, inputMessage: String): List<Validable> {
         return try {
             val priceNotification = priceNotificationService.createNotification(user.chatId, inputMessage)
 
