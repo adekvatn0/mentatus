@@ -24,6 +24,7 @@ class SeleniumService(
 
     @Async
     fun updateFinvizScreenshots() {
+
         val chromeOptions = ChromeOptions()
         chromeOptions.addArguments("--window-size=1300,1300")
         chromeOptions.addArguments("--headless")
