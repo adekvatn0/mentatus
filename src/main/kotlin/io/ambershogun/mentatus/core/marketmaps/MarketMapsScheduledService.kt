@@ -12,14 +12,8 @@ class MarketMapsScheduledService(
         private val seleniumService: SeleniumService
 ) {
 
-    private val logger = LoggerFactory.getLogger("messaging")
-
     @Scheduled(fixedRate = 1000 * 60 * 5)
     fun updateMarketMaps() {
-        try {
             seleniumService.updateFinvizScreenshots()
-        } catch (e: Exception) {
-            logger.error("Failed to update market maps\n\n", e)
-        }
     }
 }

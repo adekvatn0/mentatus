@@ -12,6 +12,8 @@
         <appender-ref ref="CONSOLE"/>
     </logger>
 
+    <logger name="yahoofinance" level="WARN" />
+
     <logger name="messaging" level="DEBUG" additivity="false">
         <appender-ref ref="CONSOLE"/>
     </logger>
