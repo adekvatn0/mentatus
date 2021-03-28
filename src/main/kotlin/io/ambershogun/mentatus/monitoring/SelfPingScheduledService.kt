@@ -5,12 +5,14 @@ import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.web.client.RestTemplateBuilder
 import org.springframework.context.annotation.DependsOn
+import org.springframework.context.annotation.Profile
 import org.springframework.http.ResponseEntity
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Service
 
 @Service
 @DependsOn("keepAliveController")
+@Profile("!test")
 class SelfPingScheduledService(
         private val appProperties: AppProperties,
         restTemplateBuilder: RestTemplateBuilder

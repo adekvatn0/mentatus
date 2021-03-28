@@ -1,5 +1,6 @@
 package io.ambershogun.mentatus.core.marketmaps.selenium
 
+import io.ambershogun.mentatus.core.properties.SeleniumProperties
 import org.apache.commons.io.FileUtils
 import org.openqa.selenium.By
 import org.openqa.selenium.OutputType
@@ -14,6 +15,7 @@ import java.util.concurrent.TimeUnit
 
 @Service
 class SeleniumService(
+        private val seleniumProperties: SeleniumProperties,
         @Value("\${marketmaps.dir}") private val marketMapsDir: String
 ) {
 
@@ -29,9 +31,9 @@ class SeleniumService(
     fun updateFinvizScreenshots() {
         try {
             val chromeOptions = ChromeOptions()
-            chromeOptions.addArguments("--window-size=1300,1300")
+            chromeOptions.addArguments("--window-size=${seleniumProperties.screenWidth},${seleniumProperties.screenHeight}")
             chromeOptions.addArguments("--headless")
-            chromeOptions.addArguments("user-agent=Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.125 Safari/537.36")
+            chromeOptions.addArguments("user-agent=${seleniumProperties.userAgent}")
 
             driver = ChromeDriver(chromeOptions)
 

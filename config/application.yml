@@ -6,6 +6,11 @@ mentatus:
     name: Ментат Сирил
     token: 1188186144:AAFiQqu82QyxGljhJr7TeQ2VH_W775GnyQU
 
+selenium:
+  screen-width: 100
+  screen-height: 100
+  user-agent: Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.125 Safari/537.36
+
 notification:
   update-rate-millis: 10000
 
