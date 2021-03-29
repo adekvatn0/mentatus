@@ -82,10 +82,16 @@ final class MentatusBot(
         val messageId = update.callbackQuery.message.messageId
         val data = update.callbackQuery.data
 
-        val responseMessage = registry.getCallbackHandler(data)
+        val responseMessages = registry.getCallbackHandler(data)
                 .handleCallback(chatId, callbackQueryId, messageId, data)
 
-        responseMessage.forEach(this::execute)
+        responseMessages.forEach {
+            when (it.javaClass) {
+                SendMessage::class.java -> execute(it as SendMessage)
+                DeleteMessage::class.java -> execute(it as DeleteMessage)
+                SendMediaGroup::class.java -> execute(it as SendMediaGroup)
+            }
+        }
     }
 
     fun sendMessageText(chatId: Long, text: String) {

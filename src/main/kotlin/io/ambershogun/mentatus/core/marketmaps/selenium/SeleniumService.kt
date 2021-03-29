@@ -8,12 +8,14 @@ import org.openqa.selenium.chrome.ChromeDriver
 import org.openqa.selenium.chrome.ChromeOptions
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.context.annotation.Profile
 import org.springframework.scheduling.annotation.Async
 import org.springframework.stereotype.Service
 import java.io.File
 import java.util.concurrent.TimeUnit
 
 @Service
+@Profile("!test")
 class SeleniumService(
         private val seleniumProperties: SeleniumProperties,
         @Value("\${marketmaps.dir}") private val marketMapsDir: String

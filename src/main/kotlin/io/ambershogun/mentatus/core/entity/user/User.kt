@@ -11,4 +11,5 @@ class User(
 ) {
     var lastActive: LocalDateTime? = null
     var lastRetryableAction: String? = null
+    var favoriteTickers: MutableSet<String> = mutableSetOf()
 }

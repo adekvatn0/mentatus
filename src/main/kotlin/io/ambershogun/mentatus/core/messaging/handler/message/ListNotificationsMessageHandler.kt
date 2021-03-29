@@ -47,7 +47,7 @@ class ListNotificationsMessageHandler(
                 listOf(
                         listOf(InlineKeyboardButton().apply {
                             text = "\uD83D\uDD15 Удалить"
-                            callbackData = "/delete?notificationId=$notificationId"
+                            callbackData = "/notification/delete?id=$notificationId"
                         })
                 )
         )

@@ -4,9 +4,7 @@ import io.ambershogun.mentatus.core.entity.notification.price.service.StockServi
 import io.ambershogun.mentatus.core.entity.user.User
 import org.springframework.stereotype.Component
 import org.telegram.telegrambots.meta.api.interfaces.Validable
-import yahoofinance.quotes.stock.StockQuote
-import java.math.BigDecimal
-import java.math.RoundingMode
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage
 
 @Component
 class StockInfoMessageHandler(
@@ -18,40 +16,20 @@ class StockInfoMessageHandler(
     }
 
     override fun handleMessageInternal(user: User, inputMessage: String): List<Validable> {
-        val stock = stockService.getStock(getTicker(inputMessage)) ?: return listOf(
+        val ticker = getTicker(inputMessage)
+
+        val stock = stockService.getStock(ticker) ?: return listOf(
                 responseService.createSendMessage(user.chatId.toString(), "stock.not.found")
         )
 
-        val sendMessage = responseService.createSendMessage(
-                user.chatId.toString(),
-                "stock.info",
-                "${stock.name} (${stock.symbol})",
-                "${stock.quote.price} ${stock.currency} ${formatPriceChangeWithEmoji(stock.quote)}",
-                "${stock.quote.priceAvg50} ${stock.currency}",
-                "${stock.quote.priceAvg200} ${stock.currency}",
-                stock.quote.volume,
-                stock.quote.avgVolume
-        )
 
-        return listOf(sendMessage)
-    }
-
-    private fun formatPriceChangeWithEmoji(quote: StockQuote): String {
-        val builder = StringBuilder()
-
-        val priceChange = quote.price - quote.previousClose
-        val percentChange = (quote.price.toDouble() - quote.previousClose.toDouble()) / quote.previousClose.toDouble() * 100
-        if (percentChange < 0) {
-            builder.append("\uD83D\uDD34")
-        } else {
-            builder.append("\uD83D\uDFE2")
+        val sendMessage = SendMessage().apply {
+            enableMarkdown(true)
+            this.chatId = user.chatId.toString()
+            this.text = stockService.getStockInfo(stock)
         }
 
-        builder.append(priceChange)
-        builder.append(" ")
-        builder.append("(${BigDecimal.valueOf(percentChange).setScale(2, RoundingMode.HALF_DOWN)}%)")
-
-        return builder.toString()
+        return listOf(sendMessage)
     }
 
     private fun getTicker(inputMessage: String): String {

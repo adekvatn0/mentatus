@@ -15,11 +15,11 @@ class DeleteNotificationCallbackHandler(
     private val logger = LoggerFactory.getLogger("messaging")
 
     override fun dataRegEx(): String {
-        return "^(\\/delete).*"
+        return "^(\\/notification/delete).*"
     }
 
     override fun handleCallbackInternal(chatId: Long, callbackQueryId: String, messageId: Int, params: Map<String, String>): List<BotApiMethod<Boolean>> {
-        val notificationId = params["notificationId"]
+        val notificationId = params["id"]
         if (notificationId == null) {
             logger.error("Required param not found, message ignored\nchatId=$chatId\ndata=$params")
             return emptyList()

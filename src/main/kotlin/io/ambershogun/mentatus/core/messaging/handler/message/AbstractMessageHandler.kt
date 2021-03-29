@@ -14,7 +14,7 @@ import java.time.LocalDateTime
 abstract class AbstractMessageHandler : MessageHandler {
 
     @Autowired
-    lateinit var userService: UserService
+    protected lateinit var userService: UserService
 
     @Autowired
     protected lateinit var responseService: ResponseService

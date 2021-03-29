@@ -1,11 +1,62 @@
 package io.ambershogun.mentatus.core.entity.notification.price.service
 
+import org.springframework.context.MessageSource
 import org.springframework.stereotype.Service
 import yahoofinance.Stock
 import yahoofinance.YahooFinance
+import java.math.BigDecimal
+import java.math.RoundingMode
+import java.util.*
 
 @Service
-class StockService {
+class StockService(
+        private val messageSource: MessageSource
+) {
+
+    fun getStockInfo(stock: Stock): String {
+        return messageSource.getMessage(
+                "stock.info",
+                arrayOf(
+                        "${stock.name} (${stock.symbol})",
+                        getStockShortInfo(stock.symbol),
+                        "${stock.quote.priceAvg50} ${stock.currency}",
+                        "${stock.quote.priceAvg200} ${stock.currency}",
+                        stock.quote.volume,
+                        stock.quote.avgVolume
+                ),
+                Locale.forLanguageTag("ru")
+        )
+    }
+
+    fun getStockShortInfo(ticker: String): String {
+        val stock = YahooFinance.get(ticker)
+        val quote = stock.quote
+
+        val builder = StringBuilder()
+
+        builder.append(quote.price)
+        builder.append("")
+        builder.append(stock.symbol)
+        builder.append("")
+
+        val priceChange = quote.price - quote.previousClose
+        val percentChange = (quote.price.toDouble() - quote.previousClose.toDouble()) / quote.previousClose.toDouble() * 100
+        if (percentChange < 0) {
+            builder.append("\uD83D\uDD34")
+        } else {
+            builder.append("\uD83D\uDFE2")
+        }
+
+        builder.append(priceChange)
+        builder.append(" ")
+        builder.append("(${BigDecimal.valueOf(percentChange).setScale(2, RoundingMode.HALF_DOWN)}%)")
+
+        return builder.toString()
+    }
+
+    fun isStockExistByTicker(ticker: String): Boolean {
+        return YahooFinance.get(ticker) != null
+    }
 
     fun getStocks(tickers: Array<String>): MutableMap<String, Stock> {
         return YahooFinance.get(tickers)
