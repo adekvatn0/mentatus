@@ -46,6 +46,8 @@ class StockService(
 
         builder.append(quote.price)
         builder.append(" ")
+        builder.append(stock.currency)
+        builder.append(" ")
 
         val priceChange = quote.price - quote.previousClose
         val percentChange = (quote.price.toDouble() - quote.previousClose.toDouble()) / quote.previousClose.toDouble() * 100
