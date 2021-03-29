@@ -15,7 +15,7 @@ class StartMessageHandler : AbstractMessageHandler() {
         message.replyMarkup = KeyboardCreator.createReplyKeyboard(
                 arrayOf(
                         arrayOf("❤️ Избранные", "🗺 Рынки"),
-                        arrayOf("\uD83D\uDD14 Уведомления", "\uD83E\uDDF0 Настройки"),
+                        arrayOf("\uD83D\uDD14 Уведомления", "⚙ Настройки"),
                         arrayOf("\uD83D\uDD30 Справка", "\uD83D\uDCEE Обратная связь")
                 )
         )
