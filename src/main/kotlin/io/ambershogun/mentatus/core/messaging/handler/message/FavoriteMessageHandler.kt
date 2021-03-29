@@ -33,7 +33,7 @@ class FavoriteMessageHandler(
                     responseService.createSendMessage(
                             user.chatId.toString(),
                             "favorite.element",
-                            it.toUpperCase(), stockService.getStockShortInfo(it)
+                            stockService.getStockShortInfo(it)
                     ).apply {
                         replyMarkup = createInlineKeyboard(it)
                     }
@@ -52,7 +52,7 @@ class FavoriteMessageHandler(
                                     callbackData = "/favorite/details?ticker=$ticker"
                                 },
                                 InlineKeyboardButton().apply {
-                                    text = "\uD83D\uDD15 Удалить"
+                                    text = "\uD83D\uDDD1️ Удалить"
                                     callbackData = "/favorite/delete?ticker=$ticker"
                                 }
                         )

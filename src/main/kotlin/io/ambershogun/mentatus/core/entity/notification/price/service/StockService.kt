@@ -18,7 +18,7 @@ class StockService(
                 "stock.info",
                 arrayOf(
                         "${stock.name} (${stock.symbol})",
-                        getStockShortInfo(stock.symbol),
+                        getPriceInfo(stock),
                         "${stock.quote.priceAvg50} ${stock.currency}",
                         "${stock.quote.priceAvg200} ${stock.currency}",
                         stock.quote.volume,
@@ -30,14 +30,22 @@ class StockService(
 
     fun getStockShortInfo(ticker: String): String {
         val stock = YahooFinance.get(ticker)
+
+        val builder = StringBuilder()
+
+        builder.append(stock.symbol)
+        builder.append(" ")
+        builder.append(getPriceInfo(stock))
+        return builder.toString()
+    }
+
+    fun getPriceInfo(stock: Stock): String {
         val quote = stock.quote
 
         val builder = StringBuilder()
 
         builder.append(quote.price)
-        builder.append("")
-        builder.append(stock.symbol)
-        builder.append("")
+        builder.append(" ")
 
         val priceChange = quote.price - quote.previousClose
         val percentChange = (quote.price.toDouble() - quote.previousClose.toDouble()) / quote.previousClose.toDouble() * 100
@@ -52,10 +60,6 @@ class StockService(
         builder.append("(${BigDecimal.valueOf(percentChange).setScale(2, RoundingMode.HALF_DOWN)}%)")
 
         return builder.toString()
-    }
-
-    fun isStockExistByTicker(ticker: String): Boolean {
-        return YahooFinance.get(ticker) != null
     }
 
     fun getStocks(tickers: Array<String>): MutableMap<String, Stock> {

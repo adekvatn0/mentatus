@@ -14,14 +14,13 @@ class AddFavoriteMessageHandler(
     override fun handleMessageInternal(user: User, inputMessage: String): List<Validable> {
         val ticker = getTicker(inputMessage)
 
-        if (!stockService.isStockExistByTicker(ticker)) {
-            return listOf(responseService.createSendMessage(
-                    user.chatId.toString(),
-                    "stock.not.found"
-            ))
-        }
+        val stock = stockService.getStock(ticker)
+                ?: return listOf(responseService.createSendMessage(
+                        user.chatId.toString(),
+                        "stock.not.found"
+                ))
 
-        user.favoriteTickers.add(ticker)
+        user.favoriteTickers.add(stock.symbol)
         userService.saveUser(user)
 
         return listOf(responseService.createSendMessage(
