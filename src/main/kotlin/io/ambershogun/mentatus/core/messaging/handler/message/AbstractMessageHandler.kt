@@ -23,10 +23,6 @@ abstract class AbstractMessageHandler : MessageHandler {
         val user = userService.findOrCreateUser(chatId)
 
         user.lastActive = LocalDateTime.now()
-        if (isRetryable()) {
-            user.lastRetryableAction = inputMessage
-        }
-
         userService.saveUser(user)
 
         return handleMessageInternal(user, inputMessage)

@@ -35,6 +35,4 @@ class StockInfoMessageHandler(
     private fun getTicker(inputMessage: String): String {
         return inputMessage.replace(" ", "").dropLast(1)
     }
-
-    override fun isRetryable() = true
 }

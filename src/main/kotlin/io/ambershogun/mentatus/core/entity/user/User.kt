@@ -9,7 +9,7 @@ class User(
         @Id
         var chatId: Long
 ) {
+    var userName: String? = null
     var lastActive: LocalDateTime? = null
-    var lastRetryableAction: String? = null
     var favoriteTickers: MutableSet<String> = mutableSetOf()
 }

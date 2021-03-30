@@ -17,6 +17,4 @@ interface MessageHandler {
     fun selfRegister(registry: HandlerRegistry) {
         registry.register(this)
     }
-
-    fun isRetryable() = false
 }
