@@ -7,8 +7,8 @@ mentatus:
     token: 1188186144:AAFiQqu82QyxGljhJr7TeQ2VH_W775GnyQU
 
 selenium:
-  screen-width: 1300
-  screen-height: 1300
+  screen-width: ${SELENIUM_WIDTH:1300}
+  screen-height: ${SELENIUM_HEIGHT:1300}
   user-agent: Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.125 Safari/537.36
   binary-path: ${GOOGLE_CHROME_SHIM:/usr/bin/google-chrome-stable}
 
