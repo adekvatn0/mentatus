@@ -20,13 +20,20 @@ class AddFavoriteMessageHandler(
                         "stock.not.found"
                 ))
 
-        user.favoriteTickers.add(stock.symbol)
+        val isAdded = user.favoriteTickers.add(stock.symbol)
         userService.saveUser(user)
 
-        return listOf(responseService.createSendMessage(
-                user.chatId.toString(),
-                "favorite.added"
-        ))
+        return if (isAdded) {
+            listOf(responseService.createSendMessage(
+                    user.chatId.toString(),
+                    "favorite.added"
+            ))
+        } else {
+            listOf(responseService.createSendMessage(
+                    user.chatId.toString(),
+                    "favorite.already.added"
+            ))
+        }
     }
 
     private fun getTicker(inputMessage: String): String {
