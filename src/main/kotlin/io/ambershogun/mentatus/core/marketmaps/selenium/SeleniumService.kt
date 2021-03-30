@@ -36,6 +36,7 @@ class SeleniumService(
             chromeOptions.addArguments("--window-size=${seleniumProperties.screenWidth},${seleniumProperties.screenHeight}")
             chromeOptions.addArguments("--headless")
             chromeOptions.addArguments("user-agent=${seleniumProperties.userAgent}")
+            chromeOptions.setBinary(seleniumProperties.binaryPath)
 
             driver = ChromeDriver(chromeOptions)
 
