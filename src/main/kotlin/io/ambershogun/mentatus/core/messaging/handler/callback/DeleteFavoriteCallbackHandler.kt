@@ -14,7 +14,7 @@ class DeleteFavoriteCallbackHandler(
 
     private val logger = LoggerFactory.getLogger("messaging")
 
-    override fun dataRegEx(): String {
+    override fun messageRegEx(): String {
         return "^(\\/favorite/delete).*"
     }
 

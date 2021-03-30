@@ -6,12 +6,13 @@ import org.springframework.stereotype.Component
 import org.telegram.telegrambots.meta.api.interfaces.Validable
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod
 import org.telegram.telegrambots.meta.api.objects.Message
+import org.telegram.telegrambots.meta.api.objects.Update
 
 @Component
 class HelpMessageHandler : AbstractMessageHandler() {
     override fun messageRegEx() = ".*Справка\$"
 
-    override fun handleMessageInternal(user: User, inputMessage: String): List<Validable> {
+    override fun handleMessage(user: User, update: Update): List<Validable> {
         return listOf(responseService.createSendMessage(user.chatId.toString(), "help"))
     }
 }

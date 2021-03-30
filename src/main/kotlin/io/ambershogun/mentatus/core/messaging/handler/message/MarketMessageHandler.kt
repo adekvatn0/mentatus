@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
 import org.telegram.telegrambots.meta.api.interfaces.Validable
 import org.telegram.telegrambots.meta.api.methods.send.SendMediaGroup
+import org.telegram.telegrambots.meta.api.objects.Update
 import org.telegram.telegrambots.meta.api.objects.media.InputMediaPhoto
 import java.io.File
 
@@ -17,7 +18,7 @@ class MarketMessageHandler(
         return "\uD83D\uDDFA Рынки"
     }
 
-    override fun handleMessageInternal(user: User, inputMessage: String): List<Validable> {
+    override fun handleMessage(user: User, update: Update): List<Validable> {
         val sectorsMedia = InputMediaPhoto()
         sectorsMedia.setMedia(File("$marketMapsDir/sectors.png"), "sectors.png")
 

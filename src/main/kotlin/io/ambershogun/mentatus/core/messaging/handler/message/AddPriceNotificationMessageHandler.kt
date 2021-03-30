@@ -5,6 +5,7 @@ import io.ambershogun.mentatus.core.entity.notification.price.service.PriceNotif
 import io.ambershogun.mentatus.core.entity.user.User
 import org.springframework.stereotype.Component
 import org.telegram.telegrambots.meta.api.interfaces.Validable
+import org.telegram.telegrambots.meta.api.objects.Update
 
 @Component
 class AddPriceNotificationMessageHandler(
@@ -12,9 +13,9 @@ class AddPriceNotificationMessageHandler(
 ) : AbstractMessageHandler() {
     override fun messageRegEx() = "^\\w+(\\s+|)(<|>)(\\s+|)\\d+(.|,|)(\\d+|)"
 
-    override fun handleMessageInternal(user: User, inputMessage: String): List<Validable> {
+    override fun handleMessage(user: User, update: Update): List<Validable> {
         return try {
-            val priceNotification = priceNotificationService.createNotification(user.chatId, inputMessage)
+            val priceNotification = priceNotificationService.createNotification(user.chatId, update.message.text)
 
             listOf(
                     responseService.createSendMessage(

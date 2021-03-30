@@ -1,8 +1,11 @@
 package io.ambershogun.mentatus.core
 
+import io.ambershogun.mentatus.core.entity.user.PersonalData
+import io.ambershogun.mentatus.core.entity.user.service.UserService
 import io.ambershogun.mentatus.core.messaging.HandlerRegistry
 import io.ambershogun.mentatus.core.messaging.util.ResponseService
 import io.ambershogun.mentatus.core.properties.AppProperties
+import io.ambershogun.mentatus.core.util.MessageType
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 import org.telegram.telegrambots.bots.TelegramLongPollingBot
@@ -13,12 +16,14 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.DeleteMessage
 import org.telegram.telegrambots.meta.api.objects.Update
 import org.telegram.telegrambots.updatesreceivers.DefaultBotSession
+import java.time.LocalDateTime
 
 @Component
 final class MentatusBot(
         private val appProperties: AppProperties,
         private val registry: HandlerRegistry,
-        private val responseService: ResponseService
+        private val responseService: ResponseService,
+        private val userService: UserService
 ) : TelegramLongPollingBot() {
 
     private val logger = LoggerFactory.getLogger("messaging")
@@ -28,14 +33,29 @@ final class MentatusBot(
     }
 
     override fun onUpdateReceived(update: Update) {
+        val chatId = getChatId(update)
+
         try {
-            when (getInputMessageType(update)) {
-                MessageType.MESSAGE -> handleMessage(update)
-                MessageType.CALLBACK -> handleCallback(update)
+            val messageType = getInputMessageType(update)
+
+            val user = userService.findOrCreateUser(chatId)
+            user.lastActive = LocalDateTime.now()
+            user.personalData = getPersonalData(update)
+            userService.saveUser(user)
+
+            val responseMessages = registry.getHandler(messageType, update).handleMessage(user, update)
+
+            responseMessages.forEach {
+                when (it.javaClass) {
+                    AnswerCallbackQuery::class.java -> execute(it as AnswerCallbackQuery)
+                    SendMessage::class.java -> execute(it as SendMessage)
+                    DeleteMessage::class.java -> execute(it as DeleteMessage)
+                    SendMediaGroup::class.java -> execute(it as SendMediaGroup)
+                }
             }
         } catch (e: UnsupportedOperationException) {
             val message = responseService.createSendMessage(
-                    getChatId(update),
+                    chatId.toString(),
                     "message.not.supported"
             )
 
@@ -43,10 +63,29 @@ final class MentatusBot(
         }
     }
 
-    private fun getChatId(update: Update): String {
+    private fun getPersonalData(update: Update): PersonalData? {
         return when (getInputMessageType(update)) {
-            MessageType.MESSAGE -> update.message.chatId.toString()
-            MessageType.CALLBACK -> update.callbackQuery.message.chat.id.toString()
+            MessageType.MESSAGE -> {
+                PersonalData(
+                        update.message.chat.firstName,
+                        update.message.chat.lastName,
+                        update.message.chat.userName
+                )
+            }
+            MessageType.CALLBACK -> {
+                PersonalData(
+                        update.callbackQuery.from.firstName,
+                        update.callbackQuery.from.lastName,
+                        update.callbackQuery.from.userName
+                )
+            }
+        }
+    }
+
+    private fun getChatId(update: Update): Long {
+        return when (getInputMessageType(update)) {
+            MessageType.MESSAGE -> update.message.chatId
+            MessageType.CALLBACK -> update.callbackQuery.message.chat.id
         }
     }
 
@@ -59,42 +98,6 @@ final class MentatusBot(
         }
 
         throw IllegalStateException("Can't determine message type")
-    }
-
-    private fun handleMessage(update: Update) {
-        val chatId = update.message.chatId
-        val inputMessage = update.message.text
-
-        val responseMessages = registry.getMessageHandler(inputMessage)
-                .handleMessage(chatId, inputMessage)
-
-        responseMessages.forEach {
-            when (it.javaClass) {
-                AnswerCallbackQuery::class.java -> execute(it as AnswerCallbackQuery)
-                SendMessage::class.java -> execute(it as SendMessage)
-                DeleteMessage::class.java -> execute(it as DeleteMessage)
-                SendMediaGroup::class.java -> execute(it as SendMediaGroup)
-            }
-        }
-    }
-
-    private fun handleCallback(update: Update) {
-        val chatId = update.callbackQuery.message.chat.id
-        val callbackQueryId = update.callbackQuery.id
-        val messageId = update.callbackQuery.message.messageId
-        val data = update.callbackQuery.data
-
-        val responseMessages = registry.getCallbackHandler(data)
-                .handleCallback(chatId, callbackQueryId, messageId, data)
-
-        responseMessages.forEach {
-            when (it.javaClass) {
-                AnswerCallbackQuery::class.java -> execute(it as AnswerCallbackQuery)
-                SendMessage::class.java -> execute(it as SendMessage)
-                DeleteMessage::class.java -> execute(it as DeleteMessage)
-                SendMediaGroup::class.java -> execute(it as SendMediaGroup)
-            }
-        }
     }
 
     fun sendMessageText(chatId: Long, text: String) {
@@ -113,6 +116,4 @@ final class MentatusBot(
     override fun getBotToken(): String {
         return appProperties.bot.token!!
     }
-
-    private enum class MessageType { MESSAGE, CALLBACK }
 }

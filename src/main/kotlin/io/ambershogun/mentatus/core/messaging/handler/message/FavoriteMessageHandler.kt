@@ -5,6 +5,7 @@ import io.ambershogun.mentatus.core.entity.user.User
 import org.springframework.stereotype.Component
 import org.springframework.util.CollectionUtils
 import org.telegram.telegrambots.meta.api.interfaces.Validable
+import org.telegram.telegrambots.meta.api.objects.Update
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton
 
@@ -17,7 +18,7 @@ class FavoriteMessageHandler(
         return ".*Избранные\$"
     }
 
-    override fun handleMessageInternal(user: User, inputMessage: String): List<Validable> {
+    override fun handleMessage(user: User, update: Update): List<Validable> {
         val favoriteTickers = user.favoriteTickers
 
         if (CollectionUtils.isEmpty(favoriteTickers)) {

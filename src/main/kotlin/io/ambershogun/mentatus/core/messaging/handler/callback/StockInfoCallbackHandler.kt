@@ -12,7 +12,7 @@ class StockInfoCallbackHandler(
         private val stockService: StockService
 ) : AbstractCallbackHandler() {
 
-    override fun dataRegEx(): String {
+    override fun messageRegEx(): String {
         return "^(\\/favorite/details).*"
     }
 

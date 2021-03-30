@@ -5,6 +5,7 @@ import io.ambershogun.mentatus.core.entity.user.User
 import org.springframework.stereotype.Component
 import org.telegram.telegrambots.meta.api.interfaces.Validable
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage
+import org.telegram.telegrambots.meta.api.objects.Update
 
 @Component
 class StockInfoMessageHandler(
@@ -15,8 +16,8 @@ class StockInfoMessageHandler(
         return "^\\w+(\\s+|)\\?$"
     }
 
-    override fun handleMessageInternal(user: User, inputMessage: String): List<Validable> {
-        val ticker = getTicker(inputMessage)
+    override fun handleMessage(user: User, update: Update): List<Validable> {
+        val ticker = getTicker(update.message.text)
 
         val stock = stockService.getStock(ticker) ?: return listOf(
                 responseService.createSendMessage(user.chatId.toString(), "stock.not.found")

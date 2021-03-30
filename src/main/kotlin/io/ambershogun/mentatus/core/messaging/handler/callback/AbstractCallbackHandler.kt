@@ -1,19 +1,26 @@
 package io.ambershogun.mentatus.core.messaging.handler.callback
 
+import io.ambershogun.mentatus.core.entity.user.User
+import io.ambershogun.mentatus.core.messaging.handler.MessageHandler
 import io.ambershogun.mentatus.core.messaging.util.ResponseService
 import org.springframework.beans.factory.annotation.Autowired
 import org.telegram.telegrambots.meta.api.interfaces.Validable
-import org.telegram.telegrambots.meta.api.methods.BotApiMethod
+import org.telegram.telegrambots.meta.api.objects.Update
 import java.net.URI
 import kotlin.streams.toList
 
-abstract class AbstractCallbackHandler : CallbackHandler {
+abstract class AbstractCallbackHandler : MessageHandler {
 
     @Autowired
     protected lateinit var responseService: ResponseService
 
-    final override fun handleCallback(chatId: Long, callbackQueryId: String, messageId: Int, data: String): List<Validable> {
-        return handleCallbackInternal(chatId, callbackQueryId, messageId, parseParams(data))
+    override fun handleMessage(user: User, update: Update): List<Validable> {
+        return handleCallbackInternal(
+                user.chatId,
+                update.callbackQuery.id,
+                update.callbackQuery.message.messageId,
+                parseParams(update.callbackQuery.data)
+        )
     }
 
     protected abstract fun handleCallbackInternal(
