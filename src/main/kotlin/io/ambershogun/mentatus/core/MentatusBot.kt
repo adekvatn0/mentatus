@@ -63,7 +63,7 @@ final class MentatusBot(
         }
     }
 
-    private fun getPersonalData(update: Update): PersonalData? {
+    private fun getPersonalData(update: Update): PersonalData {
         return when (getInputMessageType(update)) {
             MessageType.MESSAGE -> {
                 PersonalData(
