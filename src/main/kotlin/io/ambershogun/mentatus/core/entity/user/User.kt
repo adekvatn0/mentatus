@@ -9,7 +9,8 @@ class User(
         @Id
         var chatId: Long
 ) {
-    var personalData: PersonalData? = null
-    var lastActive: LocalDateTime? = null
+    lateinit var personalData: PersonalData
+    lateinit var lastActive: LocalDateTime
     var favoriteTickers: MutableSet<String> = mutableSetOf()
+    var settings = Settings()
 }

@@ -1,0 +1,15 @@
+${AnsiColor.BRIGHT_YELLOW} .S_SsS_S.     sSSs   .S_sSSs    sdSS_SSSSSSbs   .S_SSSs    sdSS_SSSSSSbs   .S       S.     sSSs
+${AnsiColor.BRIGHT_YELLOW}.SS~S*S~SS.   d%%SP  .SS~YS%%b   YSSS~S%SSSSSP  .SS~SSSSS   YSSS~S%SSSSSP  .SS       SS.   d%%SP
+${AnsiColor.BRIGHT_YELLOW}S%S `Y' S%S  d%S'    S%S   `S%b       S%S       S%S   SSSS       S%S       S%S       S%S  d%S'
+${AnsiColor.BRIGHT_YELLOW}S%S     S%S  S%S     S%S    S%S       S%S       S%S    S%S       S%S       S%S       S%S  S%|
+${AnsiColor.BRIGHT_YELLOW}S%S     S%S  S&S     S%S    S&S       S&S       S%S SSSS%S       S&S       S&S       S&S  S&S
+${AnsiColor.YELLOW}S&S     S&S  S&S_Ss  S&S    S&S       S&S       S&S  SSS%S       S&S       S&S       S&S  Y&Ss
+${AnsiColor.YELLOW}S&S     S&S  S&S~SP  S&S    S&S       S&S       S&S    S&S       S&S       S&S       S&S  `S&&S
+${AnsiColor.YELLOW}S&S     S&S  S&S     S&S    S&S       S&S       S&S    S&S       S&S       S&S       S&S    `S*S
+${AnsiColor.BRIGHT_BLUE}S*S     S*S  S*b     S*S    S*S       S*S       S*S    S&S       S*S       S*b       d*S     l*S
+${AnsiColor.BRIGHT_BLUE}S*S     S*S  S*S.    S*S    S*S       S*S       S*S    S*S       S*S       S*S.     .S*S    .S*P
+${AnsiColor.BLUE}S*S     S*S   SSSbs  S*S    S*S       S*S       S*S    S*S       S*S        SSSbs_sdSSS   sSS*S
+${AnsiColor.BLUE}SSS     S*S    YSSP  S*S    SSS       S*S       SSS    S*S       S*S         YSSP~YSSY    YSS'
+${AnsiColor.BLUE}        SP           SP               SP               SP        SP
+${AnsiColor.BLUE}        Y            Y                Y                Y         Y
+${AnsiColor.DEFAULT}
