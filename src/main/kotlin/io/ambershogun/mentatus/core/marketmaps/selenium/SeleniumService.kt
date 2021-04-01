@@ -31,6 +31,11 @@ class SeleniumService(
 
     @Async
     fun updateFinvizScreenshots() {
+        takeScreenshot("https://finviz.com/map.ashx", "$marketMapsDir/sectors.png")
+        takeScreenshot("https://finviz.com/map.ashx?t=geo", "$marketMapsDir/regions.png")
+    }
+
+    private fun takeScreenshot(url: String, fileName: String) {
         try {
             val chromeOptions = ChromeOptions()
             chromeOptions.addArguments("--window-size=${seleniumProperties.screenWidth},${seleniumProperties.screenHeight}")
@@ -40,29 +45,18 @@ class SeleniumService(
 
             driver = ChromeDriver(chromeOptions)
 
-            driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS)
+            driver.manage().timeouts().implicitlyWait(seleniumProperties.waitSecs, TimeUnit.SECONDS)
 
-            updateSectorsScreenshot()
-            updateRegionsScreenshot()
+            driver.get(url)
+            val map = driver.findElement(By.id("body"))
+            val mapFile = map.getScreenshotAs(OutputType.FILE)
+            FileUtils.copyFile(mapFile, File(fileName))
+
         } catch (e: Exception) {
             logger.error("Failed to update market maps\n\n", e)
         } finally {
             driver.quit()
         }
-    }
-
-    private fun updateSectorsScreenshot() {
-        driver.get("https://finviz.com/map.ashx")
-        val map = driver.findElement(By.id("body"))
-        val mapFile = map.getScreenshotAs(OutputType.FILE)
-        FileUtils.copyFile(mapFile, File("$marketMapsDir/sectors.png"))
-    }
-
-    private fun updateRegionsScreenshot() {
-        driver.get("https://finviz.com/map.ashx?t=geo")
-        val map = driver.findElement(By.id("body"))
-        val mapFile = map.getScreenshotAs(OutputType.FILE)
-        FileUtils.copyFile(mapFile, File("$marketMapsDir/regions.png"))
     }
 }
 

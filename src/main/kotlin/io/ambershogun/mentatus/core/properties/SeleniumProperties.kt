@@ -6,8 +6,9 @@ import org.springframework.stereotype.Component
 @Component
 @ConfigurationProperties("selenium")
 class SeleniumProperties {
-    var screenWidth: Int? = 0
-    var screenHeight: Int? = 0
+    var screenWidth: Int = 0
+    var screenHeight: Int = 0
     var userAgent: String? = null
     var binaryPath: String? = null
+    var waitSecs: Long = 0
 }
