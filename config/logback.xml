@@ -1,12 +1,19 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
 <configuration scan="true" scanPeriod="120 seconds">
+
     <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
     <include resource="org/springframework/boot/logging/logback/console-appender.xml"/>
 
-    <root level="WARN">
-        <appender-ref ref="CONSOLE"/>
-    </root>
+    <appender name="pushAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>push.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>push.%d{yyyy-MM-dd}.log</fileNamePattern>
+        </rollingPolicy>
+        <encoder>
+            <Pattern>%d{dd-MM-yyyy HH:mm:ss.SSS} %msg %n</Pattern>
+        </encoder>
+    </appender>
 
     <logger name="health" level="DEBUG" additivity="false">
         <appender-ref ref="CONSOLE"/>
@@ -15,5 +22,13 @@
     <logger name="messaging" level="DEBUG" additivity="false">
         <appender-ref ref="CONSOLE"/>
     </logger>
+
+    <logger name="push" level="INFO" additivity="false">
+        <appender-ref ref="pushAppender"/>
+    </logger>
+
+    <root level="WARN">
+        <appender-ref ref="CONSOLE"/>
+    </root>
 
 </configuration>

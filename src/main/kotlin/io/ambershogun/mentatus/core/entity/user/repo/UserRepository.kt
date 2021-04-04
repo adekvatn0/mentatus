@@ -6,6 +6,9 @@ import org.springframework.data.mongodb.repository.Query
 
 interface UserRepository : MongoRepository<User, Long> {
 
-    @Query(value = "{ 'settings' : {'MARKET_OVERVIEW': true}}")
-    fun findUserToNotifyBySchedule(): List<User>
+    @Query(value = "{ 'settings': {?0: ?1} }")
+    fun findBySetting(settingName: String, value: Boolean): List<User>
+
+    @Query(value = "{ 'personalData.username': ?0 }")
+    fun findByUsername(username: String): User?
 }

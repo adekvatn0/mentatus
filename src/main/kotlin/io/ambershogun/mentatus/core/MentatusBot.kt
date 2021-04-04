@@ -7,6 +7,7 @@ import io.ambershogun.mentatus.core.messaging.util.ResponseService
 import io.ambershogun.mentatus.core.properties.AppProperties
 import io.ambershogun.mentatus.core.util.MessageType
 import org.slf4j.LoggerFactory
+import org.springframework.context.ApplicationContext
 import org.springframework.stereotype.Component
 import org.telegram.telegrambots.bots.TelegramLongPollingBot
 import org.telegram.telegrambots.meta.TelegramBotsApi
@@ -20,7 +21,7 @@ import org.telegram.telegrambots.updatesreceivers.DefaultBotSession
 import java.time.LocalDateTime
 
 @Component
-final class MentatusBot(
+class MentatusBot(
         private val appProperties: AppProperties,
         private val registry: HandlerRegistry,
         private val responseService: ResponseService,

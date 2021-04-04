@@ -8,6 +8,14 @@ import org.springframework.stereotype.Service
 class UserService(
         private val userRepository: UserRepository
 ) {
+    fun findAll(): List<User> {
+        return userRepository.findAll()
+    }
+
+    fun findByUsername(username: String): User? {
+        return userRepository.findByUsername(username)
+    }
+
     fun findOrCreateUser(chatId: Long): User {
         return userRepository.findById(chatId)
                 .orElseGet { User(chatId) }

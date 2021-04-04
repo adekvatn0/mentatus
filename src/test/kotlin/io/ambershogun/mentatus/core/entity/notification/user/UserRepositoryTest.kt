@@ -1,10 +1,12 @@
 package io.ambershogun.mentatus.core.entity.notification.user
 
 import io.ambershogun.mentatus.AbstractTest
+import io.ambershogun.mentatus.core.entity.user.PersonalData
 import io.ambershogun.mentatus.core.entity.user.Setting
 import io.ambershogun.mentatus.core.entity.user.User
 import org.junit.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
 
 class UserRepositoryTest : AbstractTest() {
 
@@ -24,10 +26,26 @@ class UserRepositoryTest : AbstractTest() {
                 )
         )
 
-        val usersToNotify = userRepository.findUserToNotifyBySchedule()
+        val usersToNotify = userRepository.findBySetting(Setting.MARKET_OVERVIEW.name, true)
 
         assertEquals(2, usersToNotify.size)
         assertEquals(1, usersToNotify[0].chatId)
         assertEquals(3, usersToNotify[1].chatId)
+    }
+
+    @Test
+    fun `test find user by username`() {
+        userRepository.save(
+                User(1).apply {
+                    personalData = PersonalData("Skazhi", "Privet", "skazhi_privet")
+                }
+        )
+
+        val user = userRepository.findByUsername("skazhi_privet")
+
+        assertNotNull(user)
+        assertEquals(1, user.chatId)
+        assertEquals("Skazhi", user.personalData.firstName)
+        assertEquals("Privet", user.personalData.lastName)
     }
 }
