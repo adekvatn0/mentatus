@@ -1,13 +1,13 @@
 package io.ambershogun.mentatus.core
 
 import io.ambershogun.mentatus.AbstractTest
+import io.ambershogun.mentatus.core.entity.user.Setting
 import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.telegram.telegrambots.meta.api.objects.*
 import org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
-import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
 class MentatusBotTest : AbstractTest() {
@@ -43,7 +43,8 @@ class MentatusBotTest : AbstractTest() {
         assertEquals("Privet", user.personalData.lastName)
         assertEquals("skazhi_privet", user.personalData.userName)
         assertNotNull(user.settings)
-        assertEquals(false, user.settings.isScheduledNotificationsEnabled)
+        assertTrue(user.settings[Setting.MARKET_OVERVIEW]!!)
+        assertTrue(user.settings[Setting.PRICE_ALERT]!!)
         assertNotNull(user.favoriteTickers)
         assertTrue(user.favoriteTickers.isEmpty())
     }
@@ -79,7 +80,8 @@ class MentatusBotTest : AbstractTest() {
         assertEquals("Privet", user.personalData.lastName)
         assertEquals("skazhi_privet", user.personalData.userName)
         assertNotNull(user.settings)
-        assertEquals(false, user.settings.isScheduledNotificationsEnabled)
+        assertTrue(user.settings[Setting.MARKET_OVERVIEW]!!)
+        assertTrue(user.settings[Setting.PRICE_ALERT]!!)
         assertNotNull(user.favoriteTickers)
         assertTrue(user.favoriteTickers.isEmpty())
     }

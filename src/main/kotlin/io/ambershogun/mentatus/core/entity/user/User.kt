@@ -12,5 +12,11 @@ class User(
     lateinit var personalData: PersonalData
     lateinit var lastActive: LocalDateTime
     var favoriteTickers: MutableSet<String> = mutableSetOf()
-    var settings = Settings()
+    var settings = mutableMapOf<Setting, Boolean>()
+
+    init {
+        for (setting in Setting.values()) {
+            settings[setting] = setting.defaultValue
+        }
+    }
 }

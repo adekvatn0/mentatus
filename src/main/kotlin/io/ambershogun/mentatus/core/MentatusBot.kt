@@ -14,6 +14,7 @@ import org.telegram.telegrambots.meta.api.methods.AnswerCallbackQuery
 import org.telegram.telegrambots.meta.api.methods.send.SendMediaGroup
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.DeleteMessage
+import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageReplyMarkup
 import org.telegram.telegrambots.meta.api.objects.Update
 import org.telegram.telegrambots.updatesreceivers.DefaultBotSession
 import java.time.LocalDateTime
@@ -51,6 +52,7 @@ final class MentatusBot(
                     SendMessage::class.java -> execute(it as SendMessage)
                     DeleteMessage::class.java -> execute(it as DeleteMessage)
                     SendMediaGroup::class.java -> execute(it as SendMediaGroup)
+                    EditMessageReplyMarkup::class.java -> execute(it as EditMessageReplyMarkup)
                 }
             }
         } catch (e: UnsupportedOperationException) {

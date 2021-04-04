@@ -6,6 +6,6 @@ import org.springframework.data.mongodb.repository.Query
 
 interface UserRepository : MongoRepository<User, Long> {
 
-    @Query(value = "{ 'settings' : {'isScheduledNotificationsEnabled': true}}")
+    @Query(value = "{ 'settings' : {'MARKET_OVERVIEW': true}}")
     fun findUserToNotifyBySchedule(): List<User>
 }
