@@ -1,6 +1,7 @@
 package io.ambershogun.mentatus.core.notification.price.volatility
 
 import io.ambershogun.mentatus.core.notification.price.volatility.repo.PriceVolatilityRepository
+import org.slf4j.LoggerFactory
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Service
 
@@ -9,8 +10,11 @@ class PriceVolatilityScheduledService(
         private val priceVolatilityRepository: PriceVolatilityRepository
 ) {
 
-    @Scheduled(cron = "0 0 0 * * *")
+    val logger = LoggerFactory.getLogger(javaClass)
+
+    @Scheduled(cron = "0 0 4 * * *")
     fun deleteAllVolatilityRecords() {
         priceVolatilityRepository.deleteAll()
+        logger.info("All PriceVolatility are deleted")
     }
 }
