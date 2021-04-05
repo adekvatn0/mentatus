@@ -1,4 +1,4 @@
-package io.ambershogun.mentatus.core.entity.notification.price
+package io.ambershogun.mentatus.core.notification.price.threshold
 
 enum class EquitySign(val sign: String) {
     GREATER(">"),

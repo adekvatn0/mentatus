@@ -1,6 +1,6 @@
 package io.ambershogun.mentatus.core.messaging.handler.callback
 
-import io.ambershogun.mentatus.core.entity.notification.price.repo.PriceNotificationRepository
+import io.ambershogun.mentatus.core.notification.price.threshold.repo.PriceThresholdRepository
 import io.ambershogun.mentatus.core.entity.user.User
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
@@ -9,7 +9,7 @@ import org.telegram.telegrambots.meta.api.objects.Update
 
 @Component
 class DeleteNotificationCallbackHandler(
-        private val priceNotificationRepository: PriceNotificationRepository
+        private val priceThresholdRepository: PriceThresholdRepository
 ) : AbstractCallbackHandler() {
 
     private val logger = LoggerFactory.getLogger("messaging")
@@ -25,7 +25,7 @@ class DeleteNotificationCallbackHandler(
             return emptyList()
         }
 
-        priceNotificationRepository.deleteById(notificationId)
+        priceThresholdRepository.deleteById(notificationId)
 
         return listOf(
                 responseService.createPushMessage(

@@ -114,11 +114,11 @@ class MentatusBot(
         throw IllegalStateException("Can't determine message type")
     }
 
-    fun sendMessageText(chatId: Long, text: String) {
+    fun sendMessageText(chatId: Long?, text: String?) {
         val message = SendMessage().apply {
             enableMarkdown(true)
             this.chatId = chatId.toString()
-            this.text = text
+            this.text = text!!
         }
         execute(message)
     }

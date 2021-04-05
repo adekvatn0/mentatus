@@ -1,4 +1,4 @@
-package io.ambershogun.mentatus.core.entity.notification.user
+package io.ambershogun.mentatus.core.notification.user
 
 import io.ambershogun.mentatus.AbstractTest
 import io.ambershogun.mentatus.core.entity.user.PersonalData
@@ -26,7 +26,7 @@ class UserRepositoryTest : AbstractTest() {
                 )
         )
 
-        val usersToNotify = userRepository.findBySetting(Setting.MARKET_OVERVIEW.name, true)
+        val usersToNotify = userRepository.findBySetting(Setting.MARKET_OVERVIEW, true)
 
         assertEquals(2, usersToNotify.size)
         assertEquals(1, usersToNotify[0].chatId)

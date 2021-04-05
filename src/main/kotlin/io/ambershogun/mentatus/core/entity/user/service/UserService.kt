@@ -1,5 +1,6 @@
 package io.ambershogun.mentatus.core.entity.user.service
 
+import io.ambershogun.mentatus.core.entity.user.Setting
 import io.ambershogun.mentatus.core.entity.user.User
 import io.ambershogun.mentatus.core.entity.user.repo.UserRepository
 import org.springframework.stereotype.Service
@@ -23,5 +24,9 @@ class UserService(
 
     fun saveUser(user: User) {
         userRepository.save(user)
+    }
+
+    fun findBySetting(setting: Setting): List<User> {
+        return userRepository.findBySetting(setting, true)
     }
 }

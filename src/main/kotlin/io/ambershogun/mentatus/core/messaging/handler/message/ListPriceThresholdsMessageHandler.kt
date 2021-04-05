@@ -1,24 +1,22 @@
 package io.ambershogun.mentatus.core.messaging.handler.message
 
-import io.ambershogun.mentatus.core.entity.notification.price.service.PriceNotificationService
+import io.ambershogun.mentatus.core.notification.price.threshold.service.PriceThresholdService
 import io.ambershogun.mentatus.core.entity.user.User
 import org.springframework.stereotype.Component
 import org.telegram.telegrambots.meta.api.interfaces.Validable
-import org.telegram.telegrambots.meta.api.methods.BotApiMethod
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage
-import org.telegram.telegrambots.meta.api.objects.Message
 import org.telegram.telegrambots.meta.api.objects.Update
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton
 
 @Component
-class ListNotificationsMessageHandler(
-        private var priceNotificationService: PriceNotificationService
+class ListPriceThresholdsMessageHandler(
+        private var priceThresholdService: PriceThresholdService
 ) : AbstractMessageHandler() {
     override fun messageRegEx() = ".*Уведомления$"
 
     override fun handleMessage(user: User, update: Update): List<Validable> {
-        val priceNotifications = priceNotificationService.findAllByUser(user.chatId)
+        val priceNotifications = priceThresholdService.findAllByUser(user.chatId)
         if (priceNotifications.isEmpty()) {
             val message = responseService.createSendMessage(
                     user.chatId.toString(),

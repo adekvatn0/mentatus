@@ -1,11 +1,11 @@
-package io.ambershogun.mentatus.core.entity.notification.price
+package io.ambershogun.mentatus.core.notification.price.threshold
 
 import org.springframework.data.annotation.Id
 import org.springframework.data.mongodb.core.mapping.Document
 import java.math.BigDecimal
 
-@Document(collection = "PriceNotification")
-class PriceNotification(
+@Document(collection = "PriceThreshold")
+class PriceThreshold(
         var chatId: Long,
         var ticker: String,
         var equitySign: EquitySign,

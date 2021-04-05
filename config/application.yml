@@ -14,7 +14,10 @@ selenium:
   wait-secs: ${SELENIUM_WAIT:60}
 
 notification:
-  update-rate-millis: 10000
+  update-rate-millis: 30000
+  volatility:
+    trigger-percent: 2
+    step-percent: 1
 
 marketmaps:
   dir: ${MAPS_DIR:./target/classes/marketmaps/}

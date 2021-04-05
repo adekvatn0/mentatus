@@ -1,4 +1,4 @@
-package io.ambershogun.mentatus.core.entity.notification.price.service
+package io.ambershogun.mentatus.core.notification.price.threshold.service
 
 import org.springframework.context.MessageSource
 import org.springframework.stereotype.Service
@@ -64,7 +64,7 @@ class StockService(
         return builder.toString()
     }
 
-    fun getStocks(tickers: Array<String>): MutableMap<String, Stock> {
+    fun getStocks(tickers: Array<String>?): MutableMap<String, Stock> {
         return YahooFinance.get(tickers)
     }
 

@@ -1,7 +1,7 @@
 package io.ambershogun.mentatus
 
-import io.ambershogun.mentatus.core.entity.notification.price.repo.PriceNotificationRepository
-import io.ambershogun.mentatus.core.entity.notification.price.service.StockService
+import io.ambershogun.mentatus.core.notification.price.threshold.repo.PriceThresholdRepository
+import io.ambershogun.mentatus.core.notification.price.threshold.service.StockService
 import io.ambershogun.mentatus.core.entity.user.repo.UserRepository
 import org.junit.After
 import org.junit.Before
@@ -14,8 +14,6 @@ import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.junit4.SpringRunner
 import yahoofinance.Stock
-import yahoofinance.quotes.stock.StockQuote
-import java.math.BigDecimal
 
 @RunWith(SpringRunner::class)
 @SpringBootTest
@@ -23,7 +21,7 @@ import java.math.BigDecimal
 abstract class AbstractTest {
 
     @Autowired
-    protected lateinit var priceNotificationRepository: PriceNotificationRepository
+    protected lateinit var priceThresholdRepository: PriceThresholdRepository
 
     @Autowired
     protected lateinit var userRepository: UserRepository
@@ -33,7 +31,7 @@ abstract class AbstractTest {
 
     @Before
     fun init() {
-        priceNotificationRepository.deleteAll()
+        priceThresholdRepository.deleteAll()
         userRepository.deleteAll()
 
         Mockito.`when`(stockService.getStock(ArgumentMatchers.anyString())).thenAnswer {
@@ -44,6 +42,6 @@ abstract class AbstractTest {
 
     @After
     fun cleanUp() {
-        priceNotificationRepository.deleteAll()
+        priceThresholdRepository.deleteAll()
     }
 }

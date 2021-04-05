@@ -1,7 +1,7 @@
 package io.ambershogun.mentatus.core.messaging.handler
 
-import io.ambershogun.mentatus.core.entity.notification.price.EquitySign
-import io.ambershogun.mentatus.core.entity.notification.price.PriceNotification
+import io.ambershogun.mentatus.core.notification.price.threshold.EquitySign
+import io.ambershogun.mentatus.core.notification.price.threshold.PriceThreshold
 import io.ambershogun.mentatus.core.entity.user.User
 import io.ambershogun.mentatus.core.messaging.handler.message.AddPriceNotificationMessageHandler
 import org.junit.Test
@@ -38,7 +38,7 @@ class AddPriceNotificationMessageHandlerTest : AbstractMessageHandlerTest() {
         val response = messageHandler.handleMessage(User(1), update)
         assertEquals(
                 messageSource.getMessage("notification.add",
-                        arrayOf(PriceNotification(1, "MRNA", EquitySign.GREATER, 100.00, "USD")),
+                        arrayOf(PriceThreshold(1, "MRNA", EquitySign.GREATER, 100.00, "USD")),
                         Locale.forLanguageTag("ru")
                 ),
                 (response[0] as SendMessage).text

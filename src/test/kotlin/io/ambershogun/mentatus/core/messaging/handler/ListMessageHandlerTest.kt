@@ -1,9 +1,9 @@
 package io.ambershogun.mentatus.core.messaging.handler
 
-import io.ambershogun.mentatus.core.entity.notification.price.EquitySign
-import io.ambershogun.mentatus.core.entity.notification.price.PriceNotification
+import io.ambershogun.mentatus.core.notification.price.threshold.EquitySign
+import io.ambershogun.mentatus.core.notification.price.threshold.PriceThreshold
 import io.ambershogun.mentatus.core.entity.user.User
-import io.ambershogun.mentatus.core.messaging.handler.message.ListNotificationsMessageHandler
+import io.ambershogun.mentatus.core.messaging.handler.message.ListPriceThresholdsMessageHandler
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.springframework.beans.factory.annotation.Autowired
@@ -14,10 +14,10 @@ import java.util.*
 import java.util.stream.Collectors
 import kotlin.test.assertEquals
 
-class ListNotificationsMessageHandlerTest : AbstractMessageHandlerTest() {
+class ListPriceThresholdsMessageHandlerTest : AbstractMessageHandlerTest() {
 
     @Autowired
-    lateinit var messageHandler: ListNotificationsMessageHandler
+    lateinit var messageHandler: ListPriceThresholdsMessageHandler
 
     override fun `test message regex`() {
         assertTrue("\uD83D\uDD14 Уведомления".matches(Regex(messageHandler.messageRegEx())))
@@ -35,7 +35,7 @@ class ListNotificationsMessageHandlerTest : AbstractMessageHandlerTest() {
         }
 
         run {
-            val notification = priceNotificationRepository.save(PriceNotification(1, "MRNA", EquitySign.GREATER, 100.00, "USD"))
+            val notification = priceThresholdRepository.save(PriceThreshold(1, "MRNA", EquitySign.GREATER, 100.00, "USD"))
 
             val update = Update().apply { message = Message().apply { text = "strange message" } }
             val response = messageHandler.handleMessage(User(1), update)

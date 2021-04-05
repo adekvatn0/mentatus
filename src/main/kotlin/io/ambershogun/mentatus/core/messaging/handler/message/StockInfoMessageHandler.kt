@@ -1,6 +1,6 @@
 package io.ambershogun.mentatus.core.messaging.handler.message
 
-import io.ambershogun.mentatus.core.entity.notification.price.service.StockService
+import io.ambershogun.mentatus.core.notification.price.threshold.service.StockService
 import io.ambershogun.mentatus.core.entity.user.User
 import org.springframework.stereotype.Component
 import org.telegram.telegrambots.meta.api.interfaces.Validable
