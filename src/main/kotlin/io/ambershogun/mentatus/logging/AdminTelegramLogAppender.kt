@@ -23,4 +23,8 @@ class AdminTelegramLogAppender(
     override fun isRunning(): Boolean {
         return isStarted
     }
+
+    override fun start() {
+        bot.sendMessageText(appPropertis.adminId, "Mentatus bot started!")
+    }
 }
