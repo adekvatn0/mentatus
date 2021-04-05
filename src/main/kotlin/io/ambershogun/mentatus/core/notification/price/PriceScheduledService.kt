@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.MessageSource
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Service
+import org.springframework.util.CollectionUtils
 import yahoofinance.Stock
 import java.math.BigDecimal
 import java.util.*
@@ -35,22 +36,23 @@ class PriceScheduledService(
     @Scheduled(fixedRateString = "\${notification.update-rate-millis}")
     fun triggerNotifications() {
         val notificationTickers = thresholdService.getDistinctTickers()
-        stockService.getStocks(notificationTickers.toTypedArray()).values.forEach { stock ->
-            val ticker = stock.symbol
+        if (!CollectionUtils.isEmpty(notificationTickers)) {
+            stockService.getStocks(notificationTickers.toTypedArray()).values.forEach { stock ->
+                val ticker = stock.symbol
 
-            triggerThresholdNotifications(ticker, stock.quote.price, EquitySign.GREATER, stock.currency)
-            triggerThresholdNotifications(ticker, stock.quote.price, EquitySign.LESS, stock.currency)
+                triggerThresholdNotifications(ticker, stock.quote.price, EquitySign.GREATER, stock.currency)
+                triggerThresholdNotifications(ticker, stock.quote.price, EquitySign.LESS, stock.currency)
+            }
         }
 
         val favoriteTickers = userService.findAll().map {
             it.favoriteTickers
         }.flatten()
         val users = userService.findBySetting(Setting.PRICE_ALERT)
-        if (favoriteTickers.isEmpty()) {
-            return
-        }
-        stockService.getStocks(favoriteTickers.toTypedArray()).values.forEach { stock ->
-            triggerVolatilityNotifications(stock, users)
+        if (!CollectionUtils.isEmpty(favoriteTickers)) {
+            stockService.getStocks(favoriteTickers.toTypedArray()).values.forEach { stock ->
+                triggerVolatilityNotifications(stock, users)
+            }
         }
     }
 

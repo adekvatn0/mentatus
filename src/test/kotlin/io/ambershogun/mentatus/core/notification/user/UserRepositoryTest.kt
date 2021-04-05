@@ -11,11 +11,15 @@ import kotlin.test.assertNotNull
 class UserRepositoryTest : AbstractTest() {
 
     @Test
-    fun `test find user to notify by schedule`() {
+    fun `test find user by setting`() {
         userRepository.saveAll(
                 listOf(
                         User(1).apply {
-                            settings = mutableMapOf(Setting.MARKET_OVERVIEW to true)
+                            settings = mutableMapOf(
+                                    Setting.MARKET_OVERVIEW to true,
+                                    Setting.PRICE_ALERT to true,
+                                    Setting.DIVIDEND_CALENDAR to true
+                            )
                         },
                         User(2).apply {
                             settings = mutableMapOf(Setting.MARKET_OVERVIEW to false)
