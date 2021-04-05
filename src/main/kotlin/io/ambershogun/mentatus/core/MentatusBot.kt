@@ -1,6 +1,8 @@
 package io.ambershogun.mentatus.core
 
 import io.ambershogun.mentatus.core.entity.user.PersonalData
+import io.ambershogun.mentatus.core.entity.user.Setting
+import io.ambershogun.mentatus.core.entity.user.User
 import io.ambershogun.mentatus.core.entity.user.service.UserService
 import io.ambershogun.mentatus.core.messaging.HandlerRegistry
 import io.ambershogun.mentatus.core.messaging.util.ResponseService
@@ -43,6 +45,7 @@ class MentatusBot(
             val user = userService.findOrCreateUser(chatId)
             user.lastActive = LocalDateTime.now()
             user.personalData = getPersonalData(update)
+            updateSettings(user)
             userService.saveUser(user)
 
             val responseMessages = registry.getHandler(messageType, update).handleMessage(user, update)
@@ -63,6 +66,14 @@ class MentatusBot(
             )
 
             execute(message)
+        }
+    }
+
+    private fun updateSettings(user: User) {
+        Setting.values().forEach {
+            if (!user.settings.containsKey(it)) {
+                user.settings[it] = it.defaultValue
+            }
         }
     }
 
