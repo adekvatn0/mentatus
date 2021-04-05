@@ -19,10 +19,10 @@ class StockService(
                 arrayOf(
                         "${stock.name} (${stock.symbol})",
                         getPriceInfo(stock),
-                        "${stock.quote.priceAvg50} ${stock.currency}",
-                        "${stock.quote.priceAvg200} ${stock.currency}",
-                        stock.quote.volume,
-                        stock.quote.avgVolume
+                        "${stock.quote.priceAvg50.setScale(2, RoundingMode.HALF_DOWN)} ${stock.currency}",
+                        "${stock.quote.priceAvg200.setScale(2, RoundingMode.HALF_DOWN)} ${stock.currency}",
+                        BigDecimal.valueOf(stock.quote.volume).setScale(2, RoundingMode.HALF_DOWN),
+                        BigDecimal.valueOf(stock.quote.avgVolume).setScale(2, RoundingMode.HALF_DOWN)
                 ),
                 Locale.forLanguageTag("ru")
         )
@@ -44,7 +44,7 @@ class StockService(
 
         val builder = StringBuilder()
 
-        builder.append(quote.price)
+        builder.append(quote.price.setScale(2, RoundingMode.HALF_DOWN))
         builder.append(" ")
         builder.append(stock.currency)
         builder.append(" ")

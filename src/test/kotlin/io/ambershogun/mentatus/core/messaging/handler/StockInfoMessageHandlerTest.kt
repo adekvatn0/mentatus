@@ -1,21 +1,23 @@
 package io.ambershogun.mentatus.core.messaging.handler
 
+import io.ambershogun.mentatus.core.entity.user.service.UserService
 import io.ambershogun.mentatus.core.messaging.handler.message.StockInfoMessageHandler
 import org.junit.jupiter.api.Assertions
-import org.mockito.ArgumentMatchers
 import org.mockito.Mockito
 import org.springframework.beans.factory.annotation.Autowired
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage
-import yahoofinance.Stock
-import yahoofinance.quotes.stock.StockQuote
-import java.math.BigDecimal
+import org.telegram.telegrambots.meta.api.objects.Message
+import org.telegram.telegrambots.meta.api.objects.Update
 import java.util.*
-import kotlin.test.Ignore
+import kotlin.test.assertEquals
 
 class StockInfoMessageHandlerTest : AbstractMessageHandlerTest() {
 
     @Autowired
     lateinit var messageHandler: StockInfoMessageHandler
+
+    @Autowired
+    lateinit var userService: UserService
 
     override fun `test message regex`() {
         Assertions.assertTrue("nok?".matches(Regex(messageHandler.messageRegEx())))
@@ -25,35 +27,27 @@ class StockInfoMessageHandlerTest : AbstractMessageHandlerTest() {
     }
 
     override fun `test handle message`() {
-//        Mockito.`when`(stockService.getStock(ArgumentMatchers.anyString())).thenAnswer {
-//            val args: Array<Any> = it.arguments
-//            return@thenAnswer Stock((args[0] as String).toUpperCase()).apply {
-//                currency = "USD"
-//                name = "Nokia"
-//                quote = StockQuote((args[0] as String).toUpperCase()).apply {
-//                    price = BigDecimal.valueOf(100)
-//                    priceAvg50 = BigDecimal.valueOf(50)
-//                    priceAvg200 = BigDecimal.valueOf(200)
-//                    volume = 1000
-//                    avgVolume = 2000
-//                }
-//            }
+//        Mockito.`when`(stockService.getStockInfo(Mockito.any())).thenAnswer {
+//            return@thenAnswer "***Nokia Corporation (NOK)***\n" +
+//                    "\n" +
+//                    "Цена 4.00 USD \uD83D\uDFE20.04 (1.01%)\n" +
+//                    "50MA 4.03 USD\n" +
+//                    "200MA 4.04 USD\n" +
+//                    "Объём торгов 24 315 868\n" +
+//                    "Средний объем 97 282 749"
 //        }
 //
-//        val response = messageHandler.handleMessage(1, "nok?")
-//        kotlin.test.assertEquals(
-//                messageSource.getMessage(
-//                        "stock.info",
-//                        arrayOf(
-//                                "Nokia (NOK)",
-//                                "${BigDecimal.valueOf(100)} USD",
-//                                "${BigDecimal.valueOf(50)} USD",
-//                                "${BigDecimal.valueOf(200)} USD",
-//                                1000L,
-//                                2000L
-//                        ),
-//                        Locale.forLanguageTag("ru")
-//                ),
+//        val user = userService.findOrCreateUser(1)
+//        val update = Update().apply { message = Message().apply { text = "nok?" } }
+//        val response = messageHandler.handleMessage(user, update)
+//        assertEquals(
+//                "***Nokia Corporation (NOK)***\n" +
+//                        "\n" +
+//                        "Цена 4.00 USD \uD83D\uDFE20.04 (1.01%)\n" +
+//                        "50MA 4.03 USD\n" +
+//                        "200MA 4.04 USD\n" +
+//                        "Объём торгов 24 315 868\n" +
+//                        "Средний объем 97 282 749",
 //                (response[0] as SendMessage).text
 //        )
     }

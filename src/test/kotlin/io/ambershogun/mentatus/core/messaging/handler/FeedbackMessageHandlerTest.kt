@@ -9,6 +9,7 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage
 import org.telegram.telegrambots.meta.api.objects.Message
 import org.telegram.telegrambots.meta.api.objects.Update
 import java.util.*
+import kotlin.test.assertEquals
 
 class FeedbackMessageHandlerTest : AbstractMessageHandlerTest() {
 
@@ -23,7 +24,7 @@ class FeedbackMessageHandlerTest : AbstractMessageHandlerTest() {
     override fun `test handle message`() {
         val update = Update().apply { message = Message().apply { text = "help" } }
         val response = messageHandler.handleMessage(User(1), update)
-        kotlin.test.assertEquals(
+        assertEquals(
                 messageSource.getMessage("feedback", emptyArray(), Locale.forLanguageTag("ru")),
                 (response[0] as SendMessage).text
         )
