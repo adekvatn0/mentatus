@@ -6,5 +6,6 @@ Setting(
         val messageName: String
 ) {
     MARKET_OVERVIEW(true, "setting.market.overview"),
-    PRICE_ALERT(true, "setting.price.alert");
+    PRICE_ALERT(true, "setting.price.alert"),
+    DIVIDEND_CALENDAR(true, "setting.dividend.calendar");
 }
