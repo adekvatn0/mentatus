@@ -69,14 +69,14 @@ class StockService(
     }
 
     fun getStock(ticker: String): Stock? {
-        val stock = YahooFinance.get(ticker)
-        if (stock != null) {
-            return stock
-        }
-
         val moscowExchangeStock = YahooFinance.get("$ticker.ME")
         if (moscowExchangeStock != null) {
             return moscowExchangeStock
+        }
+
+        val stock = YahooFinance.get(ticker)
+        if (stock != null) {
+            return stock
         }
 
         return null
