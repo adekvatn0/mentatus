@@ -17,6 +17,6 @@ class PriceThreshold(
     var id: String? = null
 
     override fun toString(): String {
-        return "`${ticker} ${equitySign.sign} ${BigDecimal.valueOf(price).setScale(2)} $currency`"
+        return "${ticker} ${equitySign.sign} ${BigDecimal.valueOf(price).setScale(2)} $currency"
     }
 }
