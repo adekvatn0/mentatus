@@ -34,7 +34,7 @@ class FavoriteMessageHandler(
                     responseService.createSendMessage(
                             user.chatId.toString(),
                             "favorite.element",
-                            stockService.getStockShortInfo(it)
+                            responseService.getStockShortInfo(it)
                     ).apply {
                         replyMarkup = createInlineKeyboard(it)
                     }

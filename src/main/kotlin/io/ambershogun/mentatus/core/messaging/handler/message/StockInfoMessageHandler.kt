@@ -1,10 +1,9 @@
 package io.ambershogun.mentatus.core.messaging.handler.message
 
-import io.ambershogun.mentatus.core.notification.price.threshold.service.StockService
 import io.ambershogun.mentatus.core.entity.user.User
+import io.ambershogun.mentatus.core.notification.price.threshold.service.StockService
 import org.springframework.stereotype.Component
 import org.telegram.telegrambots.meta.api.interfaces.Validable
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage
 import org.telegram.telegrambots.meta.api.objects.Update
 
 @Component
@@ -23,14 +22,7 @@ class StockInfoMessageHandler(
                 responseService.createSendMessage(user.chatId.toString(), "stock.not.found")
         )
 
-
-        val sendMessage = SendMessage().apply {
-            enableMarkdown(true)
-            this.chatId = user.chatId.toString()
-            this.text = stockService.getStockInfo(stock)
-        }
-
-        return listOf(sendMessage)
+        return listOf(responseService.createStockInfoMessage(user.chatId.toString(), stock))
     }
 
     private fun getTicker(inputMessage: String): String {

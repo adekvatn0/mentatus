@@ -9,12 +9,90 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.DeleteMessage
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton
+import yahoofinance.Stock
+import yahoofinance.YahooFinance
+import java.math.BigDecimal
+import java.math.RoundingMode
 import java.util.*
 
 @Service
 class ResponseService(
         private val messageSource: MessageSource,
 ) {
+
+    fun createStockInfoMessage(chatId: String, stock: Stock): SendMessage {
+        return SendMessage().apply {
+            enableMarkdown(true)
+            this.chatId = chatId
+            this.text = messageSource.getMessage(
+                    "stock.info",
+                    arrayOf(
+                            "${stock.name} (${stock.symbol})",
+                            getPriceInfo(stock),
+                            "${stock.quote.priceAvg50.setScale(2, RoundingMode.HALF_DOWN)} ${stock.currency}",
+                            "${stock.quote.priceAvg200.setScale(2, RoundingMode.HALF_DOWN)} ${stock.currency}",
+                            BigDecimal.valueOf(stock.quote.volume).setScale(2, RoundingMode.HALF_DOWN),
+                            BigDecimal.valueOf(stock.quote.avgVolume).setScale(2, RoundingMode.HALF_DOWN)
+                    ),
+                    Locale.forLanguageTag("ru")
+            )
+            this.replyMarkup = createOpenOnYahooFinanceButton(stock.symbol)
+        }
+    }
+
+    private fun createOpenOnYahooFinanceButton(ticker: String): InlineKeyboardMarkup {
+        return InlineKeyboardMarkup(
+                listOf(
+                        listOf(
+                                InlineKeyboardButton().apply {
+                                    text = messageSource.getMessage(
+                                            "favorite.yahoo.button",
+                                            emptyArray(),
+                                            Locale.forLanguageTag("ru")
+                                    )
+                                    url = "https://finance.yahoo.com/quote/$ticker"
+                                }
+                        )
+                )
+        )
+
+    }
+
+    fun getStockShortInfo(ticker: String): String {
+        val stock = YahooFinance.get(ticker)
+
+        val builder = StringBuilder()
+
+        builder.append(stock.symbol)
+        builder.append(" ")
+        builder.append(getPriceInfo(stock))
+        return builder.toString()
+    }
+
+    fun getPriceInfo(stock: Stock): String {
+        val quote = stock.quote
+
+        val builder = StringBuilder()
+
+        builder.append(quote.price.setScale(2, RoundingMode.HALF_DOWN))
+        builder.append(" ")
+        builder.append(stock.currency)
+        builder.append(" ")
+
+        val priceChange = quote.price - quote.previousClose
+        val percentChange = (quote.price.toDouble() - quote.previousClose.toDouble()) / quote.previousClose.toDouble() * 100
+        if (percentChange < 0) {
+            builder.append("\uD83D\uDD34")
+        } else {
+            builder.append("\uD83D\uDFE2")
+        }
+
+        builder.append(priceChange)
+        builder.append(" ")
+        builder.append("(${BigDecimal.valueOf(percentChange).setScale(2, RoundingMode.HALF_DOWN)}%)")
+
+        return builder.toString()
+    }
 
     fun createDeleteMessage(chatId: String, messageId: Int): DeleteMessage {
         return DeleteMessage().apply {
