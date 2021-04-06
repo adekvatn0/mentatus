@@ -58,19 +58,21 @@ class PriceScheduledService(
 
     private fun triggerVolatilityNotifications(stock: Stock, users: List<User>) {
         val percentChange = getPercentChange(stock)
-        if (percentChange >= volatilityTriggerPercent) {
+        val absPercentChange = abs(percentChange)
+
+        if (absPercentChange >= volatilityTriggerPercent) {
             var volatility = priceVolatilityRepository.findByTicker(stock.symbol)
             if (volatility != null) {
-                if (volatility.percent > percentChange) {
+                if (volatility.percent > absPercentChange) {
                     return
-                } else if (volatility.percent + volatilityStepPercent > percentChange) {
+                } else if (volatility.percent + volatilityStepPercent > absPercentChange) {
                     return
                 }
             } else {
                 volatility = PriceVolatility(stock.symbol)
             }
 
-            volatility.percent = percentChange
+            volatility.percent = absPercentChange
             priceVolatilityRepository.save(volatility)
 
             val messageName = if (percentChange > 0) {
@@ -81,7 +83,7 @@ class PriceScheduledService(
 
             val notificationMessage = messageSource.getMessage(
                     messageName,
-                    arrayOf(stock.symbol, percentChange),
+                    arrayOf(stock.symbol, absPercentChange),
                     Locale.forLanguageTag("ru")
             )
 
@@ -94,7 +96,7 @@ class PriceScheduledService(
     }
 
     private fun getPercentChange(stock: Stock): Double {
-        return abs((stock.quote.price.toDouble() - stock.quote.previousClose.toDouble()) / stock.quote.previousClose.toDouble() * 100)
+        return (stock.quote.price.toDouble() - stock.quote.previousClose.toDouble()) / stock.quote.previousClose.toDouble() * 100
     }
 
     private fun triggerThresholdNotifications(ticker: String, currentPrice: BigDecimal, equitySign: EquitySign, currency: String) {
