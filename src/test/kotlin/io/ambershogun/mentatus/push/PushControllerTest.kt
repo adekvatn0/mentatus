@@ -97,7 +97,6 @@ class PushControllerTest : AbstractTest() {
     fun `when empty DirectPush(username) then 400`() {
         val body = DirectPush().apply {
             text = "privet"
-            username = null
         }
 
         mvc.post("/push/direct") {
@@ -119,7 +118,6 @@ class PushControllerTest : AbstractTest() {
     @Test
     fun `when empty DirectPush(text) then 400`() {
         val body = DirectPush().apply {
-            text = null
             username = "skazhi_privet"
         }
 

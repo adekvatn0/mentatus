@@ -19,7 +19,7 @@ class PushService(
     private final val logger: Logger = LoggerFactory.getLogger("push")
 
     fun sendDirectPush(push: DirectPush): PushResult {
-        val user = userService.findByUsername(push.username) ?: throw UserNotFoundException(push.username)
+        val user = userService.findByUsername(push.username!!) ?: throw UserNotFoundException(push.username!!)
         mentatusBot.sendMessageText(user.chatId, push.text)
 
         return PushResult(1)
