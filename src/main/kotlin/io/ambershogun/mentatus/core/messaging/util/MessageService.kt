@@ -30,7 +30,7 @@ class MessageService(
         builder.append("\n")
 
         stocks.forEach {
-            val prettyName = Index.findByTicker(it.key)
+            val prettyName = Index.findByTicker(it.key)!!.prettyName
 
             val quote = it.value.quote
 
