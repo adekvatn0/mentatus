@@ -14,7 +14,7 @@ class SettingsMessageHandler : AbstractMessageHandler() {
 
     override fun handleMessage(user: User, update: Update): List<Validable> {
         return listOf(
-                responseService.createSettingsMessage(user)
+                messageService.createSettingsMessage(user)
         )
     }
 }

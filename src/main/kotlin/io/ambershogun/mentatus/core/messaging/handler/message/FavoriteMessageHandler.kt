@@ -22,7 +22,7 @@ class FavoriteMessageHandler(
         val favoriteTickers = user.favoriteTickers
 
         if (CollectionUtils.isEmpty(favoriteTickers)) {
-            return listOf(responseService.createSendMessage(
+            return listOf(messageService.createSendMessage(
                     user.chatId.toString(),
                     "favorite.empty"
             ))
@@ -31,10 +31,10 @@ class FavoriteMessageHandler(
         val responses = mutableListOf<Validable>()
         favoriteTickers.forEach {
             responses.add(
-                    responseService.createSendMessage(
+                    messageService.createSendMessage(
                             user.chatId.toString(),
                             "favorite.element",
-                            responseService.getStockShortInfo(it)
+                            messageService.getStockShortInfo(it)
                     ).apply {
                         replyMarkup = createInlineKeyboard(it)
                     }

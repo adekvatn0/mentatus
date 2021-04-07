@@ -20,6 +20,6 @@ class StockInfoCallbackHandler(
 
         val stock = stockService.getStock(ticker) ?: return emptyList()
 
-        return listOf(responseService.createStockInfoMessage(user.chatId.toString(), stock))
+        return listOf(messageService.createStockInfoMessage(user.chatId.toString(), stock))
     }
 }

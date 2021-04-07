@@ -2,6 +2,7 @@ package io.ambershogun.mentatus.core.messaging.util
 
 import io.ambershogun.mentatus.core.entity.user.Setting
 import io.ambershogun.mentatus.core.entity.user.User
+import io.ambershogun.mentatus.core.notification.indexes.Index
 import org.springframework.context.MessageSource
 import org.springframework.stereotype.Service
 import org.telegram.telegrambots.meta.api.methods.AnswerCallbackQuery
@@ -16,9 +17,44 @@ import java.math.RoundingMode
 import java.util.*
 
 @Service
-class ResponseService(
+class MessageService(
         private val messageSource: MessageSource,
 ) {
+
+    fun createIndexesText(stocks: MutableMap<String, Stock>): String {
+        val builder = StringBuilder()
+
+        builder.append(messageSource.getMessage("indexes", emptyArray(), Locale.forLanguageTag("ru")))
+        builder.append("\n")
+        builder.append(" ")
+        builder.append("\n")
+
+        stocks.forEach {
+            val prettyName = Index.findByTicker(it.key)
+
+            val quote = it.value.quote
+
+            val percentChange = (quote.price.toDouble() - quote.previousClose.toDouble()) / quote.previousClose.toDouble() * 100
+
+            val redOrGreenEmoji = if (percentChange < 0) {
+                "\uD83D\uDD34"
+            } else {
+                "\uD83D\uDFE2"
+            }
+
+            builder.append(
+                    messageSource.getMessage(
+                            "indexes.element",
+                            arrayOf(redOrGreenEmoji, prettyName, percentChange),
+                            Locale.forLanguageTag("ru")
+                    )
+            )
+
+            builder.append("\n")
+        }
+
+        return builder.toString()
+    }
 
     fun createStockInfoMessage(chatId: String, stock: Stock): SendMessage {
         return SendMessage().apply {

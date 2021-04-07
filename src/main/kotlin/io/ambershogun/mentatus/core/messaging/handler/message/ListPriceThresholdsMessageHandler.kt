@@ -18,7 +18,7 @@ class ListPriceThresholdsMessageHandler(
     override fun handleMessage(user: User, update: Update): List<Validable> {
         val priceNotifications = priceThresholdService.findAllByUser(user.chatId)
         if (priceNotifications.isEmpty()) {
-            val message = responseService.createSendMessage(
+            val message = messageService.createSendMessage(
                     user.chatId.toString(),
                     "notification.list.empty"
             )
@@ -28,7 +28,7 @@ class ListPriceThresholdsMessageHandler(
         val messages = mutableListOf<SendMessage>()
 
         priceNotifications.forEach {
-            val message = responseService.createSendMessage(
+            val message = messageService.createSendMessage(
                     user.chatId.toString(),
                     "notification.list",
                     it

@@ -10,7 +10,7 @@ class StartMessageHandler : AbstractMessageHandler() {
     override fun messageRegEx() = "^\\/start$"
 
     override fun handleMessage(user: User, update: Update): List<Validable> {
-        val message = responseService.createSendMessage(user.chatId.toString(), "start")
+        val message = messageService.createSendMessage(user.chatId.toString(), "start")
         message.replyMarkup = keyboardService.createReplyKeyboard(
                 arrayOf(
                         arrayOf("❤️ Избранные", "🗺 Рынки"),

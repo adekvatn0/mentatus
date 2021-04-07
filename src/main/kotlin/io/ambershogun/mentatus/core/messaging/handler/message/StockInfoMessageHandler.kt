@@ -19,10 +19,10 @@ class StockInfoMessageHandler(
         val ticker = getTicker(update.message.text)
 
         val stock = stockService.getStock(ticker) ?: return listOf(
-                responseService.createSendMessage(user.chatId.toString(), "stock.not.found")
+                messageService.createSendMessage(user.chatId.toString(), "stock.not.found")
         )
 
-        return listOf(responseService.createStockInfoMessage(user.chatId.toString(), stock))
+        return listOf(messageService.createStockInfoMessage(user.chatId.toString(), stock))
     }
 
     private fun getTicker(inputMessage: String): String {

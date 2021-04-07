@@ -28,12 +28,12 @@ class DeleteNotificationCallbackHandler(
         priceThresholdRepository.deleteById(notificationId)
 
         return listOf(
-                responseService.createPushMessage(
+                messageService.createPushMessage(
                         user.chatId.toString(),
                         update.callbackQuery.id,
                         "notification.deleted"
                 ),
-                responseService.createDeleteMessage(
+                messageService.createDeleteMessage(
                         user.chatId.toString(),
                         update.callbackQuery.message.messageId
                 )

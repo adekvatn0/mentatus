@@ -5,7 +5,6 @@ import io.ambershogun.mentatus.core.entity.user.User
 import org.springframework.stereotype.Component
 import org.telegram.telegrambots.meta.api.interfaces.Validable
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageReplyMarkup
-import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText
 import org.telegram.telegrambots.meta.api.objects.Update
 
 @Component
@@ -24,7 +23,7 @@ class ChangeSettingsCallbackHandler : AbstractCallbackHandler() {
 
         userService.saveUser(user)
 
-        val pushMessage = responseService.createPushMessage(
+        val pushMessage = messageService.createPushMessage(
                 user.chatId.toString(),
                 update.callbackQuery.id,
                 "settings.changed"
@@ -33,7 +32,7 @@ class ChangeSettingsCallbackHandler : AbstractCallbackHandler() {
         val editSettingsMessage = EditMessageReplyMarkup().apply {
             chatId = user.chatId.toString()
             messageId = update.callbackQuery.message.messageId
-            replyMarkup = responseService.createSettingsButtons(user.settings)
+            replyMarkup = messageService.createSettingsButtons(user.settings)
         }
 
         return listOf(pushMessage, editSettingsMessage)

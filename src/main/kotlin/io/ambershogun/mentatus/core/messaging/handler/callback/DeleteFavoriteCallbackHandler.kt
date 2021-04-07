@@ -19,13 +19,13 @@ class DeleteFavoriteCallbackHandler : AbstractCallbackHandler() {
         userService.saveUser(user)
 
         return listOf(
-                responseService.createPushMessage(
+                messageService.createPushMessage(
                         user.chatId.toString(),
                         update.callbackQuery.id,
                         "favorite.deleted",
                         ticker.toUpperCase()
                 ),
-                responseService.createDeleteMessage(
+                messageService.createDeleteMessage(
                         user.chatId.toString(),
                         update.callbackQuery.message.messageId
                 )

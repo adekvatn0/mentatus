@@ -12,7 +12,7 @@ class FeedbackMessageHandler : AbstractMessageHandler() {
     }
 
     override fun handleMessage(user: User, update: Update): List<Validable> {
-        val message = responseService.createSendMessage(
+        val message = messageService.createSendMessage(
                 user.chatId.toString(),
                 "feedback"
         )

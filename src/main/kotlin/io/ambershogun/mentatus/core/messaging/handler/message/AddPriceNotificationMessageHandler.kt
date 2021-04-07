@@ -18,7 +18,7 @@ class AddPriceNotificationMessageHandler(
             val priceNotification = priceThresholdService.createNotification(user.chatId, update.message.text)
 
             listOf(
-                    responseService.createSendMessage(
+                    messageService.createSendMessage(
                             user.chatId.toString(),
                             "notification.add",
                             priceNotification.toString()
@@ -26,7 +26,7 @@ class AddPriceNotificationMessageHandler(
             )
         } catch (e: StockNotFoundException) {
             listOf(
-                    responseService.createSendMessage(
+                    messageService.createSendMessage(
                             user.chatId.toString(),
                             "stock.not.found"
                     )

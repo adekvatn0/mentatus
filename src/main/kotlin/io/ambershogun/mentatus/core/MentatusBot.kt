@@ -5,11 +5,10 @@ import io.ambershogun.mentatus.core.entity.user.Setting
 import io.ambershogun.mentatus.core.entity.user.User
 import io.ambershogun.mentatus.core.entity.user.service.UserService
 import io.ambershogun.mentatus.core.messaging.HandlerRegistry
-import io.ambershogun.mentatus.core.messaging.util.ResponseService
+import io.ambershogun.mentatus.core.messaging.util.MessageService
 import io.ambershogun.mentatus.core.properties.AppProperties
 import io.ambershogun.mentatus.core.util.MessageType
 import org.slf4j.LoggerFactory
-import org.springframework.context.ApplicationContext
 import org.springframework.stereotype.Component
 import org.telegram.telegrambots.bots.TelegramLongPollingBot
 import org.telegram.telegrambots.meta.TelegramBotsApi
@@ -26,7 +25,7 @@ import java.time.LocalDateTime
 class MentatusBot(
         private val appProperties: AppProperties,
         private val registry: HandlerRegistry,
-        private val responseService: ResponseService,
+        private val messageService: MessageService,
         private val userService: UserService
 ) : TelegramLongPollingBot() {
 
@@ -60,7 +59,7 @@ class MentatusBot(
                 }
             }
         } catch (e: UnsupportedOperationException) {
-            val message = responseService.createSendMessage(
+            val message = messageService.createSendMessage(
                     chatId.toString(),
                     "message.not.supported"
             )

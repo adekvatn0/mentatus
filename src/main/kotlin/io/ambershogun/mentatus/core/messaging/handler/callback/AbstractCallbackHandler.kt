@@ -3,7 +3,7 @@ package io.ambershogun.mentatus.core.messaging.handler.callback
 import io.ambershogun.mentatus.core.entity.user.User
 import io.ambershogun.mentatus.core.entity.user.service.UserService
 import io.ambershogun.mentatus.core.messaging.handler.MessageHandler
-import io.ambershogun.mentatus.core.messaging.util.ResponseService
+import io.ambershogun.mentatus.core.messaging.util.MessageService
 import org.springframework.beans.factory.annotation.Autowired
 import org.telegram.telegrambots.meta.api.interfaces.Validable
 import org.telegram.telegrambots.meta.api.objects.Update
@@ -13,7 +13,7 @@ import kotlin.streams.toList
 abstract class AbstractCallbackHandler : MessageHandler {
 
     @Autowired
-    protected lateinit var responseService: ResponseService
+    protected lateinit var messageService: MessageService
 
     @Autowired
     protected lateinit var userService: UserService
