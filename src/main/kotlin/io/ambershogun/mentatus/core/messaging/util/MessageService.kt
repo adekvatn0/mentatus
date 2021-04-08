@@ -2,7 +2,9 @@ package io.ambershogun.mentatus.core.messaging.util
 
 import io.ambershogun.mentatus.core.entity.user.Setting
 import io.ambershogun.mentatus.core.entity.user.User
-import io.ambershogun.mentatus.core.notification.indexes.Index
+import io.ambershogun.mentatus.core.notification.market.Exchange
+import io.ambershogun.mentatus.core.notification.market.Index
+import io.ambershogun.mentatus.core.notification.price.threshold.service.StockService
 import org.springframework.context.MessageSource
 import org.springframework.stereotype.Service
 import org.telegram.telegrambots.meta.api.methods.AnswerCallbackQuery
@@ -19,38 +21,99 @@ import java.util.*
 @Service
 class MessageService(
         private val messageSource: MessageSource,
+        private val stockService: StockService
 ) {
 
-    fun createIndexesText(stocks: MutableMap<String, Stock>): String {
+    fun createMarketReview(): String {
         val builder = StringBuilder()
 
-        builder.append(messageSource.getMessage("indexes", emptyArray(), Locale.forLanguageTag("ru")))
-        builder.append("\n")
-        builder.append(" ")
-        builder.append("\n")
+        run {
+            val indexTickers = Index.values().map {
+                it.ticker
+            }.toTypedArray()
 
-        stocks.forEach {
-            val prettyName = Index.findByTicker(it.key)!!.prettyName
+            val stocks = stockService.getStocks(indexTickers)
 
-            val quote = it.value.quote
 
-            val percentChange = (quote.price.toDouble() - quote.previousClose.toDouble()) / quote.previousClose.toDouble() * 100
 
-            val redOrGreenEmoji = if (percentChange < 0) {
-                "\uD83D\uDD34"
-            } else {
-                "\uD83D\uDFE2"
+            builder.append(messageSource.getMessage("market.indexes", emptyArray(), Locale.forLanguageTag("ru")))
+            builder.append("\n")
+
+            stocks.forEach {
+                val prettyName = Index.findByTicker(it.key)!!.prettyName
+
+                val quote = it.value.quote
+
+                val percentChange = BigDecimal.valueOf(
+                        (quote.price.toDouble() - quote.previousClose.toDouble()) / quote.previousClose.toDouble() * 100
+                ).setScale(3, RoundingMode.HALF_DOWN)
+
+                val redOrGreenEmoji = if (percentChange < BigDecimal.ZERO) {
+                    "\uD83D\uDD34"
+                } else {
+                    "\uD83D\uDFE2"
+                }
+
+                val percentWithSign = if (percentChange > BigDecimal.ZERO) {
+                    "+$percentChange"
+                } else {
+                    percentChange
+                }
+
+                builder.append(
+                        messageSource.getMessage(
+                                "market.element.index",
+                                arrayOf(redOrGreenEmoji, prettyName, percentWithSign),
+                                Locale.forLanguageTag("ru")
+                        )
+                )
+
+                builder.append("\n")
             }
+        }
 
-            builder.append(
-                    messageSource.getMessage(
-                            "indexes.element",
-                            arrayOf(redOrGreenEmoji, prettyName, percentChange),
-                            Locale.forLanguageTag("ru")
-                    )
-            )
+        run {
+            val exchangeTickers = Exchange.values().map {
+                it.ticker
+            }.toTypedArray()
+
+            val stocks = stockService.getStocks(exchangeTickers)
 
             builder.append("\n")
+            builder.append(messageSource.getMessage("market.exchanges", emptyArray(), Locale.forLanguageTag("ru")))
+            builder.append("\n")
+
+            stocks.forEach {
+                val prettyName = Exchange.findByTicker(it.key)!!.prettyName
+
+                val quote = it.value.quote
+
+                val percentChange = BigDecimal.valueOf((
+                        quote.price.toDouble() - quote.previousClose.toDouble()) / quote.previousClose.toDouble() * 100
+                ).setScale(3, RoundingMode.HALF_DOWN)
+
+                val redOrGreenEmoji = if (percentChange < BigDecimal.ZERO) {
+                    "\uD83D\uDD34"
+                } else {
+                    "\uD83D\uDFE2"
+                }
+
+                val percentWithSign = if (percentChange > BigDecimal.ZERO) {
+                    "+$percentChange"
+                } else {
+                    percentChange
+                }
+
+                builder.append(
+                        messageSource.getMessage(
+                                "market.element.exchange",
+                                arrayOf(redOrGreenEmoji, prettyName, quote.price.setScale(2, RoundingMode.HALF_DOWN), percentWithSign),
+                                Locale.forLanguageTag("ru")
+                        )
+                )
+
+                builder.append("\n")
+            }
         }
 
         return builder.toString()

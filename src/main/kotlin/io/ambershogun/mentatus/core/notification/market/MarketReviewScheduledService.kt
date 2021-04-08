@@ -1,4 +1,4 @@
-package io.ambershogun.mentatus.core.notification.indexes
+package io.ambershogun.mentatus.core.notification.market
 
 import io.ambershogun.mentatus.core.MentatusBot
 import io.ambershogun.mentatus.core.entity.user.Setting
@@ -9,22 +9,15 @@ import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Service
 
 @Service
-class IndexesScheduledService(
+class MarketReviewScheduledService(
         private val userService: UserService,
         private val mentatusBot: MentatusBot,
-        private val stockService: StockService,
         private val messageService: MessageService
 ) {
 
-    @Scheduled(cron = "0 0 12,19,22 * * *")
+    @Scheduled(cron = "0 0 10,16,20 * * *", zone = "Europe/Moscow")
     fun notifyWithMarketReview() {
-        val indexTickers = Index.values().map {
-            it.ticker
-        }.toTypedArray()
-
-        val stocks = stockService.getStocks(indexTickers)
-
-        val text = messageService.createIndexesText(stocks)
+        val text = messageService.createMarketReview()
 
         userService.findBySetting(Setting.MARKET_OVERVIEW)
                 .forEach {

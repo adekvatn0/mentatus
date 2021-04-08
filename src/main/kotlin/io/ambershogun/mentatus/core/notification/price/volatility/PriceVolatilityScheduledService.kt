@@ -12,7 +12,7 @@ class PriceVolatilityScheduledService(
 
     val logger = LoggerFactory.getLogger(javaClass)
 
-    @Scheduled(cron = "0 30 19 * * *")
+    @Scheduled(cron = "0 30 16 * * *", zone = "Europe/Moscow")
     fun deleteAllVolatilityRecords() {
         priceVolatilityRepository.deleteAll()
         logger.info("All PriceVolatility are deleted")

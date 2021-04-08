@@ -1,7 +1,7 @@
 package io.ambershogun.mentatus.core.messaging.handler.message
 
 import io.ambershogun.mentatus.core.entity.user.User
-import io.ambershogun.mentatus.core.notification.indexes.Index
+import io.ambershogun.mentatus.core.notification.market.Index
 import io.ambershogun.mentatus.core.notification.price.threshold.service.StockService
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
@@ -11,8 +11,7 @@ import org.telegram.telegrambots.meta.api.objects.Update
 
 @Component
 class MarketMessageHandler(
-        @Value("\${marketmaps.dir}") private val marketMapsDir: String,
-        private val stockService: StockService
+        @Value("\${marketmaps.dir}") private val marketMapsDir: String
 ) : AbstractMessageHandler() {
 
     override fun messageRegEx(): String {
@@ -32,18 +31,10 @@ class MarketMessageHandler(
 //                sectorsMedia, regionsMedia
 //        )
 
-        val indexTickers = Index.values().map {
-            it.ticker
-        }.toTypedArray()
-
-        val stocks = stockService.getStocks(indexTickers)
-
-        val text = messageService.createIndexesText(stocks)
-
         return listOf(SendMessage().apply {
             this.chatId = user.chatId.toString()
             this.enableMarkdown(true)
-            this.text = text
+            this.text = messageService.createMarketReview()
         })
     }
 }

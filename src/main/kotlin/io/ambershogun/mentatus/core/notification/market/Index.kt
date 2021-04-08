@@ -1,4 +1,4 @@
-package io.ambershogun.mentatus.core.notification.indexes
+package io.ambershogun.mentatus.core.notification.market
 
 enum class Index(var prettyName: String, var ticker: String) {
     SP500("S&P 500", "^GSPC"),
