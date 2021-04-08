@@ -16,7 +16,7 @@ class IndexesScheduledService(
         private val messageService: MessageService
 ) {
 
-    @Scheduled(cron = "0 30 19 * * *")
+    @Scheduled(cron = "0 0 12,19,22 * * *")
     fun notifyWithMarketReview() {
         val indexTickers = Index.values().map {
             it.ticker
