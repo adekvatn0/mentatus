@@ -12,8 +12,8 @@ class MarketMapsScheduledService(
         private val seleniumService: SeleniumService
 ) {
 
-    @Scheduled(fixedRate = 1000 * 60 * 10)
-    fun updateMarketMaps() {
-            seleniumService.updateFinvizScreenshots()
-    }
+//    @Scheduled(fixedRate = 1000 * 60 * 10)
+//    fun updateMarketMaps() {
+//            seleniumService.updateFinvizScreenshots()
+//    }
 }

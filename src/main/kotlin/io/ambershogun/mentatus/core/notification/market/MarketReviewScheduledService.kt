@@ -15,7 +15,7 @@ class MarketReviewScheduledService(
         private val messageService: MessageService
 ) {
 
-    @Scheduled(cron = "0 0 10,16,20 * * *", zone = "Europe/Moscow")
+    @Scheduled(cron = "0 0 13,19,23 * * *")
     fun notifyWithMarketReview() {
         val text = messageService.createMarketReview()
 
