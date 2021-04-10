@@ -2,14 +2,17 @@ package io.ambershogun.mentatus.core.messaging.util
 
 import io.ambershogun.mentatus.core.entity.user.Setting
 import io.ambershogun.mentatus.core.entity.user.User
+import io.ambershogun.mentatus.core.marketmaps.FinvizImageService
 import io.ambershogun.mentatus.core.notification.market.Exchange
 import io.ambershogun.mentatus.core.notification.market.Index
 import io.ambershogun.mentatus.core.notification.price.threshold.service.StockService
 import org.springframework.context.MessageSource
 import org.springframework.stereotype.Service
 import org.telegram.telegrambots.meta.api.methods.AnswerCallbackQuery
+import org.telegram.telegrambots.meta.api.methods.send.SendMediaGroup
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.DeleteMessage
+import org.telegram.telegrambots.meta.api.objects.media.InputMediaPhoto
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton
 import yahoofinance.Stock
@@ -21,10 +24,25 @@ import java.util.*
 @Service
 class MessageService(
         private val messageSource: MessageSource,
-        private val stockService: StockService
+        private val stockService: StockService,
+        private val finvizImageService: FinvizImageService
 ) {
 
-    fun createMarketReview(): String {
+    fun createMarketImagesMessage(): SendMediaGroup {
+        val holder = finvizImageService.getHolder()
+
+        val sectorsMedia = InputMediaPhoto()
+        sectorsMedia.media = holder.sectorUrl
+
+        val regionsMedia = InputMediaPhoto()
+        regionsMedia.media = holder.regionsUrl
+
+        return SendMediaGroup().apply {
+            medias = listOf(sectorsMedia, regionsMedia)
+        }
+    }
+
+    fun createMarketOverviewMessage(): SendMessage {
         val builder = StringBuilder()
 
         run {
@@ -114,7 +132,10 @@ class MessageService(
             }
         }
 
-        return builder.toString()
+        return SendMessage().apply {
+            enableMarkdown(true)
+            this.text = builder.toString()
+        }
     }
 
     fun createStockInfoMessage(chatId: String, stock: Stock): SendMessage {

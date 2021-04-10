@@ -4,26 +4,29 @@ import io.ambershogun.mentatus.core.MentatusBot
 import io.ambershogun.mentatus.core.entity.user.Setting
 import io.ambershogun.mentatus.core.entity.user.service.UserService
 import io.ambershogun.mentatus.core.messaging.util.MessageService
-import io.ambershogun.mentatus.core.notification.price.threshold.service.StockService
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Service
 
 @Service
-class MarketReviewScheduledService(
+class MarketOverviewScheduledService(
         private val userService: UserService,
         private val mentatusBot: MentatusBot,
         private val messageService: MessageService
 ) {
 
     @Scheduled(cron = "0 0 13,19,23 * * *")
-    fun notifyWithMarketReview() {
-        val text = messageService.createMarketReview()
+    fun sendMarketOverview() {
+        val marketOverviewMessage = messageService.createMarketOverviewMessage()
+        val marketImages = messageService.createMarketImagesMessage()
 
         userService.findBySetting(Setting.MARKET_OVERVIEW)
                 .forEach {
-                    mentatusBot.sendMessageText(
-                            it.chatId,
-                            text)
+                    marketOverviewMessage.chatId = it.chatId.toString()
+                    marketImages.chatId = it.chatId.toString()
+
+                    mentatusBot.sendMessages(
+                            listOf(marketOverviewMessage, marketImages)
+                    )
                 }
     }
 }

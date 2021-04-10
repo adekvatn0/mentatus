@@ -8,10 +8,10 @@ import io.ambershogun.mentatus.core.messaging.HandlerRegistry
 import io.ambershogun.mentatus.core.messaging.util.MessageService
 import io.ambershogun.mentatus.core.properties.AppProperties
 import io.ambershogun.mentatus.core.util.MessageType
-import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 import org.telegram.telegrambots.bots.TelegramLongPollingBot
 import org.telegram.telegrambots.meta.TelegramBotsApi
+import org.telegram.telegrambots.meta.api.interfaces.Validable
 import org.telegram.telegrambots.meta.api.methods.AnswerCallbackQuery
 import org.telegram.telegrambots.meta.api.methods.send.SendMediaGroup
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage
@@ -28,8 +28,6 @@ class MentatusBot(
         private val messageService: MessageService,
         private val userService: UserService
 ) : TelegramLongPollingBot() {
-
-    private val logger = LoggerFactory.getLogger("messaging")
 
     init {
         TelegramBotsApi(DefaultBotSession::class.java).registerBot(this)
@@ -49,15 +47,7 @@ class MentatusBot(
 
             val responseMessages = registry.getHandler(messageType, update).handleMessage(user, update)
 
-            responseMessages.forEach {
-                when (it.javaClass) {
-                    AnswerCallbackQuery::class.java -> execute(it as AnswerCallbackQuery)
-                    SendMessage::class.java -> execute(it as SendMessage)
-                    DeleteMessage::class.java -> execute(it as DeleteMessage)
-                    SendMediaGroup::class.java -> execute(it as SendMediaGroup)
-                    EditMessageReplyMarkup::class.java -> execute(it as EditMessageReplyMarkup)
-                }
-            }
+            sendMessages(responseMessages)
         } catch (e: UnsupportedOperationException) {
             val message = messageService.createSendMessage(
                     chatId.toString(),
@@ -65,6 +55,18 @@ class MentatusBot(
             )
 
             execute(message)
+        }
+    }
+
+    fun sendMessages(messages: List<Validable>) {
+        messages.forEach {
+            when (it.javaClass) {
+                AnswerCallbackQuery::class.java -> execute(it as AnswerCallbackQuery)
+                SendMessage::class.java -> execute(it as SendMessage)
+                DeleteMessage::class.java -> execute(it as DeleteMessage)
+                SendMediaGroup::class.java -> execute(it as SendMediaGroup)
+                EditMessageReplyMarkup::class.java -> execute(it as EditMessageReplyMarkup)
+            }
         }
     }
 

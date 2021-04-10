@@ -11,7 +11,7 @@ selenium:
   screen-height: ${SELENIUM_HEIGHT:1300}
   user-agent: Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.125 Safari/537.36
   binary-path: ${GOOGLE_CHROME_SHIM:/usr/bin/google-chrome-stable}
-  wait-secs: ${SELENIUM_WAIT:60}
+  wait-secs: ${SELENIUM_WAIT:10}
 
 notification:
   update-rate-millis: 30000
