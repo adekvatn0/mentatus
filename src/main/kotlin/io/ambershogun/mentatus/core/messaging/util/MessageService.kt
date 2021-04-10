@@ -34,8 +34,6 @@ class MessageService(
 
             val stocks = stockService.getStocks(indexTickers)
 
-
-
             builder.append(messageSource.getMessage("market.indexes", emptyArray(), Locale.forLanguageTag("ru")))
             builder.append("\n")
 
