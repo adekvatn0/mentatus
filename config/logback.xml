@@ -21,7 +21,6 @@
 
     <logger name="messaging" level="DEBUG" additivity="false">
         <appender-ref ref="CONSOLE"/>
-        <appender-ref ref="messagingAppender"/>
     </logger>
 
     <logger name="push" level="INFO" additivity="false">

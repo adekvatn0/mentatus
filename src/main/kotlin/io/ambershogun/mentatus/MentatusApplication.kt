@@ -25,7 +25,6 @@ fun main(args: Array<String>) {
 
 fun addTelegramLogAppender(context: ConfigurableApplicationContext) {
     val customAppender = context.getBean(AdminTelegramLogAppender::class.java)
-    customAppender.name = "messagingAppender"
     val rootLogger: Logger = (LoggerFactory.getILoggerFactory() as LoggerContext).getLogger("messaging")
     rootLogger.addAppender(customAppender)
 }
