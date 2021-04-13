@@ -13,6 +13,6 @@ class FinvizScheduledService(
 
     @Scheduled(fixedRate = 1000 * 60 * 5)
     fun updateMarketMaps() {
-        seleniumService.updateFinvizScreenshots()
+//        seleniumService.updateFinvizScreenshots()
     }
 }
