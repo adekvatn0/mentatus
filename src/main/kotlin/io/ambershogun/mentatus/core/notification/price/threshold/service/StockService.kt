@@ -2,9 +2,7 @@ package io.ambershogun.mentatus.core.notification.price.threshold.service
 
 import com.google.common.cache.CacheBuilder
 import com.google.common.cache.CacheLoader
-import com.google.common.collect.ImmutableMap
 import org.springframework.stereotype.Service
-import org.springframework.util.CollectionUtils
 import yahoofinance.Stock
 import yahoofinance.YahooFinance
 import java.util.concurrent.TimeUnit
@@ -18,6 +16,11 @@ class StockService {
             .expireAfterWrite(15, TimeUnit.SECONDS)
             .build(object : CacheLoader<String, Stock?>() {
                 override fun load(ticker: String): Stock? {
+                    val stock = YahooFinance.get("$ticker.ME")
+                    if (stock != null) {
+                        return stock
+                    }
+
                     return YahooFinance.get(ticker)
                 }
             })
