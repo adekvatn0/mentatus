@@ -15,7 +15,7 @@
         </encoder>
     </appender>
 
-    <logger name="health" level="DEBUG" additivity="false">
+    <logger name="health" level="INFO" additivity="false">
         <appender-ref ref="CONSOLE"/>
     </logger>
 
