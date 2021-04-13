@@ -8,6 +8,7 @@ import io.ambershogun.mentatus.core.messaging.HandlerRegistry
 import io.ambershogun.mentatus.core.messaging.util.MessageService
 import io.ambershogun.mentatus.core.properties.AppProperties
 import io.ambershogun.mentatus.core.util.MessageType
+import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 import org.telegram.telegrambots.bots.TelegramLongPollingBot
 import org.telegram.telegrambots.meta.TelegramBotsApi
@@ -32,6 +33,8 @@ class MentatusBot(
     init {
         TelegramBotsApi(DefaultBotSession::class.java).registerBot(this)
     }
+
+    val logger = LoggerFactory.getLogger("messaging")
 
     override fun onUpdateReceived(update: Update) {
         val chatId = getChatId(update)
@@ -59,14 +62,18 @@ class MentatusBot(
     }
 
     fun sendMessages(messages: List<Validable>) {
-        messages.forEach {
-            when (it.javaClass) {
-                AnswerCallbackQuery::class.java -> execute(it as AnswerCallbackQuery)
-                SendMessage::class.java -> execute(it as SendMessage)
-                DeleteMessage::class.java -> execute(it as DeleteMessage)
-                SendMediaGroup::class.java -> execute(it as SendMediaGroup)
-                EditMessageReplyMarkup::class.java -> execute(it as EditMessageReplyMarkup)
+        try {
+            messages.forEach {
+                when (it.javaClass) {
+                    AnswerCallbackQuery::class.java -> execute(it as AnswerCallbackQuery)
+                    SendMessage::class.java -> execute(it as SendMessage)
+                    DeleteMessage::class.java -> execute(it as DeleteMessage)
+                    SendMediaGroup::class.java -> execute(it as SendMediaGroup)
+                    EditMessageReplyMarkup::class.java -> execute(it as EditMessageReplyMarkup)
+                }
             }
+        } catch (e: Exception) {
+            logger.error("Failed to send messages", e)
         }
     }
 

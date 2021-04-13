@@ -14,7 +14,7 @@ class MarketOverviewScheduledService(
         private val messageService: MessageService
 ) {
 
-    @Scheduled(cron = "0 0 13,19,23 * * *")
+    @Scheduled(cron = "0 30 13,19,23 * * *")
     fun sendMarketOverview() {
         val marketOverviewMessage = messageService.createMarketOverviewMessage()
         val marketImages = messageService.createMarketImagesMessage()
@@ -25,7 +25,10 @@ class MarketOverviewScheduledService(
                     marketImages.chatId = it.chatId.toString()
 
                     mentatusBot.sendMessages(
-                            listOf(marketOverviewMessage, marketImages)
+                            listOf(
+                                    marketOverviewMessage
+//                                    marketImages
+                            )
                     )
                 }
     }
